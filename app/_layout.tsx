@@ -12,7 +12,7 @@ import "react-native-reanimated";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+export default function AppLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     "Jakarta-Bold": require("../assets/fonts/PlusJakartaSans-Bold.ttf"),

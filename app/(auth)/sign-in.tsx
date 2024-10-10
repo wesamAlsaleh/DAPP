@@ -9,12 +9,8 @@ import GlobalStyles from "@/scripts/GlobalStyles";
 import { icons, images } from "@/constants";
 
 // import custom components
-import InputField from "@/components/InputField";
+import InputField from "@/components/CustomInputField";
 import CustomButton from "@/components/CustomButton";
-// import OAuth from "@/components/OAuth";
-
-// import clerk functions
-// import { useSignIn } from "@clerk/clerk-expo";
 
 const SignIn = () => {
   // form values
@@ -23,37 +19,14 @@ const SignIn = () => {
     password: "",
   });
 
-  // clerk functions
-  // const { signIn, setActive, isLoaded } = useSignIn();
-
   // router to navigate to other pages
   const router = useRouter();
 
   // function to handle sign up
   const onSignInPress = useCallback(async () => {
-    // if the clerk is not loaded, return
-    if (!isLoaded) {
-      return;
-    }
-
     try {
-      // create a sign in attempt with the email and password from the form values
-      const signInAttempt = await signIn.create({
-        identifier: formValues.email,
-        password: formValues.password,
-      });
-
-      // if the sign in attempt is complete, set the active session and ...
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/(root)/(tabs)/home"); // redirect to the home page
-      } else {
-        console.error(JSON.stringify(signInAttempt, null, 2)); // client side error
-      }
-    } catch (err: any) {
-      console.error(JSON.stringify(err, null, 2)); // server side error (clerk error)
-    }
-  }, [isLoaded, formValues.email, formValues.password]);
+    } catch (err: any) {}
+  }, [formValues.email, formValues.password]);
 
   return (
     <ScrollView className="flex-1 bg-white">
@@ -100,24 +73,21 @@ const SignIn = () => {
             className="mt-6"
           />
 
-          {/* OAuth container */}
-          <OAuth />
-
-          {/* sign up link */}
-          <Link
+          {/* TODO: sign up link if there is client purposes */}
+          {/* <Link
             href="/sign-up"
             className="text-center text-lg font-JakartaSemiBold text-general-200 mt-10"
           >
-            <Text>New to CarHub?</Text>
+            <Text>New to DAPP?</Text>
             <Text className="text-lg font-JakartaSemiBold text-primary-500">
               {" "}
               Sign Up
             </Text>
-          </Link>
+          </Link> */}
         </View>
       </View>
 
-      {/* TODO:  modal  */}
+      {/* TODO:  modal after success  */}
     </ScrollView>
   );
 };
