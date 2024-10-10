@@ -24,6 +24,7 @@ const SignIn = () => {
 
   // function to handle sign up
   const onSignInPress = useCallback(async () => {
+    console.log(formValues);
     try {
     } catch (err: any) {}
   }, [formValues.email, formValues.password]);
@@ -37,12 +38,12 @@ const SignIn = () => {
           <Image source={images.signUpCar} className="z-0 w-full h-[250px]" />
 
           <Text className="absolute bottom-10 left-5 text-2xl font-JakartaSemiBold text-black ">
-            Welcome back 👋
+            DAPP Sign In
           </Text>
         </View>
 
         {/* form container */}
-        <View className="p-5">
+        <View className="p-5 flex justify-center">
           {/* email input field */}
           <InputField
             label="Email Address"
