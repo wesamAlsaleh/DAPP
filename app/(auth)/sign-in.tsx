@@ -12,6 +12,9 @@ import { icons, images } from "@/constants";
 import InputField from "@/components/CustomInputField";
 import CustomButton from "@/components/CustomButton";
 
+// import axios to make api requests
+import axios from "axios";
+
 const SignIn = () => {
   // form values
   const [formValues, setFormValues] = useState({
@@ -19,14 +22,48 @@ const SignIn = () => {
     password: "",
   });
 
+  // Error state
+  const [error, setError] = useState({});
+
   // router to navigate to other pages
   const router = useRouter();
 
   // function to handle sign up
   const onSignInPress = useCallback(async () => {
+    // Empty error object
+    setError({});
+
+    // TODO: remove this console.log
     console.log(formValues);
+
+    // make a post request to the server
     try {
-    } catch (err: any) {}
+      axios.post(
+        "http://127.0.0.1:8000/api/login",
+        {
+          email: formValues.email,
+          password: formValues.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/vnd.api+json",
+          },
+        }
+      );
+    } catch (error) {
+      const fakeResponse = {
+        message: "The provided credentials are incorrect.",
+        errors: {
+          email: ["The provided credentials are incorrect."],
+        },
+      };
+
+      // Set the error state to show the error message to the user
+      // setErrors(error.message);
+
+      // TODO: remove this line
+      setError(fakeResponse.message);
+    }
   }, [formValues.email, formValues.password]);
 
   return (
