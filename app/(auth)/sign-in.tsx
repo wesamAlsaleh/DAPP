@@ -33,14 +33,14 @@ const SignIn = () => {
     console.log(formValues);
 
     try {
-      // Get the user token
-      const token = await login(formValues.email, formValues.password);
+      // Login the user using the email and password
+      await login(formValues.email, formValues.password); // this function will put the user token in the secure store
 
-      // Set the token in the secure storage (user device storage)
-
-      // Load the user data using the token
-      const user = await loadUser(token);
-    } catch (error) {}
+      // Load the user data using the stored token in the secure store
+      const user = await loadUser();
+    } catch (error) {
+      console.error(error);
+    }
   }, [formValues.email, formValues.password]);
 
   return (
