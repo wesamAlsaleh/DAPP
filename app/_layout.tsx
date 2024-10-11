@@ -1,3 +1,5 @@
+import AuthContext from "@/contexts/AuthContext";
+import { loadUser } from "@/services/auth-services";
 import {
   DarkTheme,
   DefaultTheme,
@@ -6,13 +8,47 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+// create an interface for the user data
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export default function AppLayout() {
+  // Authenticated user state
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Load the user to pass it to the app layout context (AuthContext)
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        // Load the user
+        const authenticatedUser = await loadUser();
+
+        // Set the user
+        setUser(authenticatedUser);
+      } catch (error) {
+        console.error("Failed to load user from AppLayout:", error);
+        setUser(null); // Ensure user is null on failure
+      } finally {
+        setLoading(false); // Set loading to false
+      }
+    }
+
+    // Fetch the user
+    fetchUser();
+  }, []);
+
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     "Jakarta-Bold": require("../assets/fonts/PlusJakartaSans-Bold.ttf"),
@@ -36,12 +72,14 @@ export default function AppLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+    <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
 
-      {/* Define the route groups */}
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)" options={{ headerShown: false }} />
-    </Stack>
+        {/* Define the route groups */}
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(root)" options={{ headerShown: false }} />
+      </Stack>
+    </AuthContext.Provider>
   );
 }

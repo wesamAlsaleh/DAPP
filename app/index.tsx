@@ -1,8 +1,15 @@
 import { Redirect } from "expo-router";
 
-export default function Index() {
-  // this will always redirect to the welcome page
-  return <Redirect href={"/(auth)/sign-in"} />;
-}
+import { useAuth } from "@/contexts/AuthContext";
 
-// TODO: if the user is already logged in, redirect them to the home page else redirect them to the sign-in page
+export default function Index() {
+  // get the user data from the AuthContext
+  const { user, loading } = useAuth();
+
+  // check if the user is authenticated and redirect to the home page if true
+  return user ? (
+    <Redirect href="/(root)/home" />
+  ) : (
+    <Redirect href="/(auth)/sign-in" />
+  );
+}
