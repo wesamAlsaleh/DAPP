@@ -36,10 +36,13 @@ const SignIn = () => {
     // TODO: remove this console.log
     console.log(formValues);
 
+    // TODO: remove this console.log
+    // console.log(process.env.v4 + "/login");
+
     // make a post request to the server
     try {
       axios.post(
-        "http://127.0.0.1:8000/api/login",
+        `http://127.0.0.1:8000/api/login`,
         {
           email: formValues.email,
           password: formValues.password,
