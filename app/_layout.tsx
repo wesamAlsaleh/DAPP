@@ -72,7 +72,7 @@ export default function AppLayout() {
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
+    <AuthContext.Provider value={{ user }}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
 

@@ -38,6 +38,7 @@ const SignIn = () => {
 
       // Load the user data using the stored token in the secure store
       const user = await loadUser();
+      console.log(user);
     } catch (error) {
       console.error(error);
     }

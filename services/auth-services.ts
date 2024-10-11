@@ -4,6 +4,16 @@ import axios from "axios";
 // import token service functions to store and retrieve the token from the secure store (user device)
 import { getToken, setToken } from "./token-service";
 
+const API_BASE_URL = "http://127.0.0.1:8000/api"; // Update this as needed
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}
+
 /**
  * Logs in a user with the provided email and password.
  * Sends a POST request to the login API endpoint and retrieves an authentication token.
@@ -15,7 +25,7 @@ import { getToken, setToken } from "./token-service";
  */
 export async function login(email: string, password: string) {
   const { data } = await axios.post(
-    `http://127.0.0.1:8000/api/login`,
+    `${API_BASE_URL}/login`,
     {
       email: email,
       password: password,
@@ -27,8 +37,11 @@ export async function login(email: string, password: string) {
     }
   ); // get the token from the response!
 
+  // get the token from the response
+  const token = data.token;
+
   // store the token in the secure store
-  await setToken(data.token);
+  await setToken(token);
 }
 
 /**
@@ -37,15 +50,15 @@ export async function login(email: string, password: string) {
  * This function retrieves the user token from the secure store and uses it to
  * make an authenticated request to the API endpoint to fetch the user data.
  *
- * @returns {Promise<any>} A promise that resolves to the user data.
+ * @returns {Promise<User>} A promise that resolves to the user data.
  *
  * @throws {Error} If the request fails or the token is invalid.
  */
-export async function loadUser(): Promise<any> {
+export async function loadUser(): Promise<User> {
   // get the user token from the secure store
   const token = await getToken();
 
-  const { data: user } = await axios.get(`http://127.0.0.1:8000/api/user`, {
+  const { data: user } = await axios.get(`${API_BASE_URL}/user`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
