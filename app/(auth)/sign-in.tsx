@@ -12,8 +12,8 @@ import { icons, images } from "@/constants";
 import InputField from "@/components/CustomInputField";
 import CustomButton from "@/components/CustomButton";
 
-// import axios to make api requests
-import axios from "axios";
+// import auth services from services folder
+import { login, loadUser } from "@/services/auth-services";
 
 const SignIn = () => {
   // form values
@@ -30,47 +30,17 @@ const SignIn = () => {
 
   // function to handle sign up
   const onSignInPress = useCallback(async () => {
-    // Empty error object
-    setError({});
-
-    // TODO: remove this console.log
     console.log(formValues);
 
-    // make a post request to the server to get the user token
     try {
-      const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/login`,
-        {
-          email: formValues.email,
-          password: formValues.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/vnd.api+json",
-          },
-        }
-      ); // get the token from the response!
+      // Get the user token
+      const token = await login(formValues.email, formValues.password);
 
-      // Make a get request to get the user details using the token
-      const { data: userData } = await axios.get(
-        `http://127.0.0.1:8000/api/user`,
-        {
-          headers: {
-            Accept: "application/vnd.api+json",
-            Authorization: `Bearer ${data.token}`,
-          },
-        }
-      );
+      // Set the token in the secure storage (user device storage)
 
-      // TODO: remove this console.logs
-      console.log(data);
-      console.log(userData);
-
-      // TODO: Navigate to another page or show success message
-      // router.push('/some-page');
-    } catch (error) {
-      console.log(error);
-    }
+      // Load the user data using the token
+      const user = await loadUser(token);
+    } catch (error) {}
   }, [formValues.email, formValues.password]);
 
   return (
