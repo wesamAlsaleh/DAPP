@@ -36,9 +36,8 @@ const SignIn = () => {
       // Login the user using the email and password
       await login(formValues.email, formValues.password); // this function will put the user token in the secure store
 
-      // Load the user data using the stored token in the secure store
-      const user = await loadUser();
-      console.log(user);
+      // After the user is logged in, route to the home page
+      router.push("/(root)/(tabs)/home");
     } catch (error) {
       console.error(error);
     }
