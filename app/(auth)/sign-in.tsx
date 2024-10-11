@@ -36,12 +36,9 @@ const SignIn = () => {
     // TODO: remove this console.log
     console.log(formValues);
 
-    // TODO: remove this console.log
-    // console.log(process.env.v4 + "/login");
-
-    // make a post request to the server
+    // make a post request to the server to get the user token
     try {
-      axios.post(
+      const { data } = await axios.post(
         `http://127.0.0.1:8000/api/login`,
         {
           email: formValues.email,
@@ -52,20 +49,27 @@ const SignIn = () => {
             "Content-Type": "application/vnd.api+json",
           },
         }
+      ); // get the token from the response!
+
+      // Make a get request to get the user details using the token
+      const { data: userData } = await axios.get(
+        `http://127.0.0.1:8000/api/user`,
+        {
+          headers: {
+            Accept: "application/vnd.api+json",
+            Authorization: `Bearer ${data.token}`,
+          },
+        }
       );
+
+      // TODO: remove this console.logs
+      console.log(data);
+      console.log(userData);
+
+      // TODO: Navigate to another page or show success message
+      // router.push('/some-page');
     } catch (error) {
-      const fakeResponse = {
-        message: "The provided credentials are incorrect.",
-        errors: {
-          email: ["The provided credentials are incorrect."],
-        },
-      };
-
-      // Set the error state to show the error message to the user
-      // setErrors(error.message);
-
-      // TODO: remove this line
-      setError(fakeResponse.message);
+      console.log(error);
     }
   }, [formValues.email, formValues.password]);
 
