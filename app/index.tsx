@@ -7,12 +7,9 @@ export default function Index() {
   const { user } = useAuth();
 
   // check if the user is authenticated to redirect to the home page if true
-  // return user ? (
-  //   <Redirect href="/(root)/home" />
-  // ) : (
-  //   <Redirect href="/(auth)/sign-in" />
-  // );
-
-  // TODO: Remove this line after implementing the pages
-  return <Redirect href="/(root)/home" />;
+  return user ? (
+    <Redirect href="/(root)/home" />
+  ) : (
+    <Redirect href="/(auth)/sign-in" />
+  );
 }
