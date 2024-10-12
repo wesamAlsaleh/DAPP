@@ -99,7 +99,7 @@ const SignIn = () => {
           />
 
           {/* TODO: sign up link if there is client purposes */}
-          {/* <Link
+          <Link
             href="/sign-up"
             className="text-center text-lg font-JakartaSemiBold text-general-200 mt-10"
           >
@@ -108,7 +108,7 @@ const SignIn = () => {
               {" "}
               Sign Up
             </Text>
-          </Link> */}
+          </Link>
         </View>
       </View>
 
