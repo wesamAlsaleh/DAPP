@@ -25,7 +25,7 @@ interface User {
 
 export default function AppLayout() {
   // Authenticated user state
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null); // this will be globally available
   const [loading, setLoading] = useState<boolean>(true);
 
   // Load the user to pass it to the app layout context (AuthContext)
@@ -35,7 +35,7 @@ export default function AppLayout() {
         // Load the user
         const authenticatedUser = await loadUser();
 
-        // Set the user
+        // Set the user in the state
         setUser(authenticatedUser);
       } catch (error) {
         console.error("Failed to load user from AppLayout:", error);
@@ -72,7 +72,7 @@ export default function AppLayout() {
   }
 
   return (
-    <AuthContext.Provider value={{ user }}>
+    <AuthContext.Provider value={{ user, setUser }}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
 

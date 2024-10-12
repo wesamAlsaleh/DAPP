@@ -67,3 +67,32 @@ export async function loadUser(): Promise<User> {
   // return the user data
   return user;
 }
+
+/**
+ * Logs out the current user by performing the following steps:
+ * 1. Retrieves the user token from the secure store.
+ * 2. Sends a POST request to the logout endpoint with the token in the Authorization header.
+ * 3. Removes the token from the secure store.
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>} A promise that resolves when the logout process is complete.
+ */
+export async function logout() {
+  // get the user token from the secure store
+  const token = await getToken();
+
+  // send a POST request to the logout endpoint
+  await axios.post(
+    `${API_BASE_URL}/logout`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  // remove the token from the secure store
+  await setToken("NULL");
+}

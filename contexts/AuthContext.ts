@@ -12,7 +12,7 @@ interface User {
 // create an interface for the AuthContext
 interface AuthContextType {
   user: User | null;
-  // setUser: Dispatch<SetStateAction<User | null>>;
+  setUser: Dispatch<SetStateAction<User | null>>;
   // loading: boolean;
   // setLoading: Dispatch<SetStateAction<boolean>>;
 }
@@ -20,7 +20,7 @@ interface AuthContextType {
 // create a context to store the user data and the setUser function
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  // setUser: () => {},
+  setUser: () => {},
   // loading: true,
   // setLoading: () => {},
 });

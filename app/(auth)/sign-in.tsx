@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { View, Text, ScrollView, Image } from "react-native";
 import { Link, useRouter } from "expo-router";
 
@@ -14,6 +14,7 @@ import CustomButton from "@/components/CustomButton";
 
 // import auth services from services folder
 import { login, loadUser } from "@/services/auth-services";
+import AuthContext from "@/contexts/AuthContext";
 
 const SignIn = () => {
   // form values
@@ -28,6 +29,9 @@ const SignIn = () => {
   // router to navigate to other pages
   const router = useRouter();
 
+  // update the context with the user data
+  const { setUser } = useContext(AuthContext);
+
   // function to handle sign up
   const onSignInPress = useCallback(async () => {
     console.log(formValues);
@@ -36,10 +40,16 @@ const SignIn = () => {
       // Login the user using the email and password
       await login(formValues.email, formValues.password); // this function will put the user token in the secure store
 
+      // Load the user data
+      const user = await loadUser();
+
+      // Set the user in the context
+      setUser(user);
+
       // After the user is logged in, route to the home page
       router.push("/(root)/(tabs)/home");
     } catch (error) {
-      console.error(error);
+      console.error("Failed to sign in:", error);
     }
   }, [formValues.email, formValues.password]);
 
