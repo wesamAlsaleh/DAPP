@@ -16,7 +16,10 @@ export default function home() {
   const { user } = useAuth();
   return (
     <ProtectedRoute>
-      <SafeAreaView style={GlobalStyles.droidSafeArea}>
+      <SafeAreaView
+        style={GlobalStyles.droidSafeArea}
+        className="bg-general-500"
+      >
         <View>
           <Text className="text-2xl ">Welcome home {user?.name}</Text>
         </View>
