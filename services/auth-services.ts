@@ -4,7 +4,8 @@ import axios from "axios";
 // import token service functions to store and retrieve the token from the secure store (user device)
 import { getToken, setToken } from "./token-service";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api"; // Update this as needed
+// const API_BASE_URL = "http://127.0.0.1:8000/api"; // Update this as needed
+const API_BASE_URL = "http://dapp.bableto.site/api"; // Update this as needed
 
 interface User {
   id: string;
@@ -12,6 +13,31 @@ interface User {
   email: string;
   created_at: string;
   updated_at: string;
+}
+
+/**
+ *  Registers a new user with the provided name, email and password.
+ */
+export async function register(name: string, email: string, password: string) {
+  const { data } = await axios.post(
+    `${API_BASE_URL}/register`,
+    {
+      name: name,
+      email: email,
+      password: password,
+    },
+    {
+      headers: {
+        "Content-Type": "application/vnd.api+json",
+      },
+    }
+  ); // get the token from the response!
+
+  // get the token from the response
+  const token = data.token;
+
+  // store the token in the secure store
+  await setToken(token);
 }
 
 /**
@@ -24,6 +50,8 @@ interface User {
  * @returns A promise that resolves when the token has been successfully stored.
  */
 export async function login(email: string, password: string) {
+  console.log(`${API_BASE_URL}/login`);
+
   const { data } = await axios.post(
     `${API_BASE_URL}/login`,
     {

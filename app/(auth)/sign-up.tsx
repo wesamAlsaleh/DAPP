@@ -13,6 +13,12 @@ import { icons, images } from "@/constants";
 import InputField from "@/components/CustomInputField";
 import CustomButton from "@/components/CustomButton";
 
+// import auth services from services folder
+import { loadUser, register } from "@/services/auth-services";
+
+// import auth context
+import { useAuth } from "@/contexts/AuthContext";
+
 const SignUp = () => {
   // form values
   const [formValues, setFormValues] = useState({
@@ -21,24 +27,29 @@ const SignUp = () => {
     password: "",
   });
 
-  // verification state for email address verification
-  const [Verification, setVerification] = useState({
-    state: "default",
-    error: "",
-    code: "",
-  });
-
   // show success modal state
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const { user, setUser } = useAuth();
 
   // function to handle sign up
   const onSignUpPress = async () => {
     console.log(formValues);
 
     try {
-    } catch (err: any) {
-      // if there is an error, log it using Alert
-      Alert.alert(err.errors[0].longMessage);
+      // Login the user using the email and password
+      await register(formValues.name, formValues.email, formValues.password); // this function will put the user token in the secure store
+
+      // Load the user data
+      const user = await loadUser();
+
+      // Set the user in the context
+      setUser(user);
+
+      // After the user is logged in, route to the home page
+      router.push("/(root)/(tabs)/home");
+    } catch (error) {
+      console.error("Failed to sign in:", error);
     }
   };
 
