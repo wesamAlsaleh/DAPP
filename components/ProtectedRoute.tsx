@@ -9,12 +9,12 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
-  if (loading) {
-    // Optionally, render a loading indicator
-    return null;
-  }
+  // if (loading) {
+  //   // Optionally, render a loading indicator
+  //   return null;
+  // }
 
   if (!user) {
     return <Redirect href="/(auth)/sign-in" />;
