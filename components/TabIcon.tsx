@@ -28,7 +28,7 @@ const TabIcon = ({
       {/* icon container "inner view" */}
       <View
         className={`rounded-full w-12 h-12 items-center justify-center ${
-          focused ? "bg-general-400" : ""
+          focused ? "bg-primary-600" : ""
         }`}
       >
         {/* icon it self */}
