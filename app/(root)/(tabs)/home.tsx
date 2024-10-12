@@ -31,48 +31,27 @@ export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
 
-  // mock data for the region
-  const [region, setRegion] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
-
   return (
     <ProtectedRoute>
       <SafeAreaView
         style={GlobalStyles.droidSafeArea}
         className="bg-general-500"
       >
-        <View className="bg-[#3498db] items-center justify-center p-6">
-          <Text style={styles.headerTitle}>Driver Map</Text>
+        <View className="bg-general-500 items-start justify-center p-5">
+          <Text className="text-black font-bold text-2xl">
+            Welcome back <Text className="text-primary-500">{user?.name}</Text>{" "}
+            👋
+          </Text>
         </View>
       </SafeAreaView>
     </ProtectedRoute>
   );
 }
 
+// map styles
 const styles = StyleSheet.create({
-  headerTitle: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
   map: {
     width: width,
     height: height - 100,
-  },
-  fab: {
-    position: "absolute",
-    bottom: 16,
-    right: 16,
-    backgroundColor: "#3498db",
-    borderRadius: 28,
-    width: 56,
-    height: 56,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 4,
   },
 });
