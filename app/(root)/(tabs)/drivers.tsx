@@ -1,13 +1,18 @@
+import CustomButton from "@/components/CustomButton";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import GlobalStyles from "@/scripts/GlobalStyles";
 import React from "react";
 import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function drivers() {
   return (
-    <View>
-      <Text className="text-2xl">Drivers Screen</Text>
-      <Text className="text-base">
-        Drivers Screen to show all driver with their status
-      </Text>
-    </View>
+    <ProtectedRoute>
+      <SafeAreaView style={GlobalStyles.droidSafeArea}>
+        <View>
+          <Text className="text-2xl ">Drivers list</Text>
+        </View>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 }
