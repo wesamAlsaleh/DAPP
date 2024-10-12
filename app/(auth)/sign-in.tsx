@@ -34,7 +34,7 @@ const SignIn = () => {
 
   // function to handle sign up
   const onSignInPress = useCallback(async () => {
-    console.log(formValues);
+    // console.log(formValues);
 
     try {
       // Login the user using the email and password

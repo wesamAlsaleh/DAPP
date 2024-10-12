@@ -50,8 +50,6 @@ export async function register(name: string, email: string, password: string) {
  * @returns A promise that resolves when the token has been successfully stored.
  */
 export async function login(email: string, password: string) {
-  console.log(`${API_BASE_URL}/login`);
-
   const { data } = await axios.post(
     `${API_BASE_URL}/login`,
     {

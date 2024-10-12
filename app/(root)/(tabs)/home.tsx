@@ -10,6 +10,9 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 // import the logout function from the auth-services
 import { logout } from "@/services/auth-services";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import GlobalStyles from "@/scripts/GlobalStyles";
+import CustomButton from "@/components/CustomButton";
 
 export default function home() {
   // get the user data from the AuthContext
@@ -33,14 +36,18 @@ export default function home() {
 
   return (
     <ProtectedRoute>
-      <View>
-        <Text className="text-2xl">Welcome home {user?.name}</Text>
-        <Text className="text-base">Home Screen is ....</Text>
-      </View>
+      <SafeAreaView style={GlobalStyles.droidSafeArea}>
+        <View>
+          <Text className="text-2xl ">Welcome home {user?.name}</Text>
+        </View>
 
-      <TouchableOpacity onPress={handleLogout}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
+        {/* Logout button */}
+        <CustomButton
+          title="Logout"
+          onPress={handleLogout}
+          bgVariant={"danger"}
+        />
+      </SafeAreaView>
     </ProtectedRoute>
   );
 }
