@@ -9,9 +9,6 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import GlobalStyles from "@/scripts/GlobalStyles";
 
 // import the AuthContext through useAuth hook
-import CustomButton from "@/components/CustomButton";
-
-// import the AuthContext through useAuth hook
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function home() {
