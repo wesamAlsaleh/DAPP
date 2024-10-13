@@ -18,6 +18,7 @@ export default function layout() {
         tabBarActiveTintColor: "white", // active tab color
         tabBarInactiveTintColor: "white", // inactive tab color
         tabBarShowLabel: false, // hide tab bar label
+        tabBarHideOnKeyboard: true, // hide tab bar when keyboard is open
         tabBarStyle: {
           backgroundColor: "#333333",
           borderRadius: 50,
@@ -30,7 +31,7 @@ export default function layout() {
           alignItems: "center",
           justifyContent: "space-between",
           flexDirection: "row",
-          position: "absolute", // this will make the tab bar always above the content
+          position: "absolute", // keep the tab bar above the content
         },
       }}
     >

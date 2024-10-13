@@ -94,6 +94,7 @@ export default function drivers() {
         {/* header section */}
         <View className="px-4 py-6">
           <Text className="text-2xl font-bold mb-4">Drivers List</Text>
+
           {/* search bar */}
           <CustomInputField
             label="Search drivers"
@@ -102,6 +103,7 @@ export default function drivers() {
             onChangeText={(text) => setSearchQuery(text)}
             containerStyle="bg-primary-100"
           />
+
           {/* main section */}
           {/* if loading show spinner otherwise show the FlatList */}
           {loading ? (
