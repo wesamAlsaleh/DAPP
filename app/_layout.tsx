@@ -47,7 +47,7 @@ export default function AppLayout() {
         const authenticatedUser = await loadUser();
 
         // Log the authenticated user
-        console.log("Authenticated user:", authenticatedUser);
+        // console.log("Authenticated user:", authenticatedUser);
 
         // Set the user in the state
         setUser(authenticatedUser);

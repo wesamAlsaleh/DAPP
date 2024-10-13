@@ -19,25 +19,32 @@ interface User {
  *  Registers a new user with the provided name, email and password.
  */
 export async function register(name: string, email: string, password: string) {
-  const { data } = await axios.post(
-    `${API_BASE_URL}/register`,
-    {
-      name: name,
-      email: email,
-      password: password,
-    },
-    {
-      headers: {
-        "Content-Type": "application/vnd.api+json",
+  try {
+    const { data } = await axios.post(
+      `${API_BASE_URL}/register`,
+      {
+        name: name,
+        email: email,
+        password: password,
       },
+      {
+        headers: {
+          "Content-Type": "application/vnd.api+json",
+        },
+      }
+    ); // get the token from the response!
+
+    // if the response contains a token then store it
+    if (data.token) {
+      const token = data.token;
+      await setToken(token);
     }
-  ); // get the token from the response!
+  } catch (error) {
+    console.error("Registration failed:", error);
 
-  // get the token from the response
-  const token = data.token;
-
-  // store the token in the secure store
-  await setToken(token);
+    // Optionally, you can throw the error to be handled elsewhere
+    throw error;
+  }
 }
 
 /**
@@ -50,24 +57,31 @@ export async function register(name: string, email: string, password: string) {
  * @returns A promise that resolves when the token has been successfully stored.
  */
 export async function login(email: string, password: string) {
-  const { data } = await axios.post(
-    `${API_BASE_URL}/login`,
-    {
-      email: email,
-      password: password,
-    },
-    {
-      headers: {
-        "Content-Type": "application/vnd.api+json",
+  try {
+    const { data } = await axios.post(
+      `${API_BASE_URL}/login`,
+      {
+        email: email,
+        password: password,
       },
+      {
+        headers: {
+          "Content-Type": "application/vnd.api+json",
+        },
+      }
+    ); // get the token from the response!
+
+    // if the response contains a token then store it
+    if (data.token) {
+      const token = data.token;
+      await setToken(token);
     }
-  ); // get the token from the response!
+  } catch (error) {
+    console.error("Login failed:", error);
 
-  // get the token from the response
-  const token = data.token;
-
-  // store the token in the secure store
-  await setToken(token);
+    // Optionally, you can throw the error to be handled elsewhere
+    throw error;
+  }
 }
 
 /**
@@ -81,17 +95,26 @@ export async function login(email: string, password: string) {
  * @throws {Error} If the request fails or the token is invalid.
  */
 export async function loadUser(): Promise<User> {
-  // get the user token from the secure store
-  const token = await getToken();
+  try {
+    // get the user token from the secure store
+    const token = await getToken();
 
-  const { data: user } = await axios.get(`${API_BASE_URL}/user`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+    if (!token) {
+      throw new Error("No token available");
+    }
 
-  // return the user data
-  return user;
+    const { data: user } = await axios.get(`${API_BASE_URL}/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // return the user data
+    return user;
+  } catch (error) {
+    console.error("Failed to load user:", error);
+    throw error;
+  }
 }
 
 /**
@@ -105,20 +128,27 @@ export async function loadUser(): Promise<User> {
  * @returns {Promise<void>} A promise that resolves when the logout process is complete.
  */
 export async function logout() {
-  // get the user token from the secure store
-  const token = await getToken();
+  try {
+    // get the user token from the secure store
+    const token = await getToken();
 
-  // send a POST request to the logout endpoint
-  await axios.post(
-    `${API_BASE_URL}/logout`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+    // send a POST request to the logout endpoint
+    await axios.post(
+      `${API_BASE_URL}/logout`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  // remove the token from the secure store
-  await setToken("NULL");
+    // remove the token from the secure store
+    await setToken("NULL");
+  } catch (error) {
+    console.error("Logout failed:", error);
+    // Even if logout fails, ensure the token is removed to prevent unauthorized access
+    await setToken("NULL");
+    throw error;
+  }
 }

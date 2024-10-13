@@ -22,7 +22,7 @@ export async function setToken(newToken: string) {
   // Set the token in the token variable to be used globally
   token = newToken;
 
-  if (token !== null) {
+  if (token !== null || token !== "NULL") {
     // Store the token in the SecureStore (user device) as key-value pair
     await SecureStore.setItemAsync("token", token);
   } else {
