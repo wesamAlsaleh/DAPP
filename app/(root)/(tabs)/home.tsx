@@ -17,6 +17,9 @@ import GlobalStyles from "@/scripts/GlobalStyles";
 // import the AuthContext through useAuth hook
 import { useAuth } from "@/contexts/AuthContext";
 
+// import the Custom components
+import CustomButton from "@/components/CustomButton";
+
 // import the Dimensions API to get the window dimensions
 const { width, height } = Dimensions.get("window");
 
@@ -34,11 +37,26 @@ export default function home() {
   return (
     // <ProtectedRoute>
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
-      <View className="bg-general-500 items-start justify-center p-5">
+      {/* header section */}
+      <View className=" items-start justify-center p-5">
         <Text className="text-black font-bold text-2xl">
           Welcome back <Text className="text-primary-500">{user?.name}</Text> 👋
         </Text>
       </View>
+
+      {/* main section  */}
+      <View className="flex-1">
+        {/* route to map page */}
+        <CustomButton
+          onPress={() => {}}
+          title="View Map"
+          bgVariant="primary"
+          textVariant="primary"
+          className="m-2"
+        />
+      </View>
+
+      {/* header section */}
     </SafeAreaView>
     // </ProtectedRoute>
   );

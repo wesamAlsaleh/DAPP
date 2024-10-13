@@ -75,7 +75,7 @@ export default function CustomButton({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`w-full rounded-lg p-3 flex flex-row justify-center items-center shadow-md bg-primary-500 ${getBgVariantStyle(
+      className={` rounded-lg p-3 flex flex-row justify-center items-center shadow-md bg-primary-500 ${getBgVariantStyle(
         bgVariant
       )} ${className}`}
       {...props}
