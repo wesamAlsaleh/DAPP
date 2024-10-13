@@ -34,8 +34,6 @@ const SignUp = () => {
 
   // function to handle sign up
   const onSignUpPress = async () => {
-    console.log(formValues);
-
     try {
       // Login the user using the email and password
       await register(formValues.name, formValues.email, formValues.password); // this function will put the user token in the secure store

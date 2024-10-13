@@ -104,7 +104,18 @@ export async function loadUser(): Promise<User> {
     });
 
     // log the user data to the console
-    console.log("User data:", user);
+    // console.log("User data:", user);
+    /**
+     * {
+     * "created_at": "2024-10-13T16:30:08.000000Z",
+     *  "email": "wesam@gmail.com",
+     *  "email_verified_at": null,
+     *  "id": 1,
+     *  "name": "DevWesam",
+     *  "role": "driver",
+     *  "updated_at": "2024-10-13T16:30:08.000000Z"
+     * }
+     */
 
     // return the user data
     return user;
