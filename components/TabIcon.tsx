@@ -25,11 +25,7 @@ const TabIcon = ({
     //     focused ? "bg-general-300" : ""
     //   }`}
     // >
-    <View
-      className={`flex flex-row items-center justify-center ${
-        focused ? "bg-general-300" : ""
-      }`}
-    >
+    <View className={`flex flex-row items-center justify-center`}>
       {/* icon container "inner view" */}
       <View
         className={`rounded-full w-12 h-12 items-center justify-center ${
