@@ -19,15 +19,20 @@ let token: string | Promise<string | null> | null = null;
  * @returns A promise that resolves when the token has been set or removed from the secure storage.
  */
 export async function setToken(newToken: string) {
-  // Set the token in the token variable to be used globally
-  token = newToken;
+  try {
+    // Set the token in the token variable to be used globally
+    token = newToken;
 
-  if (token !== null || token !== "NULL") {
-    // Store the token in the SecureStore (user device) as key-value pair
-    await SecureStore.setItemAsync("token", token);
-  } else {
-    // Remove the token from the SecureStore (user device)
-    await SecureStore.deleteItemAsync("token");
+    if (token !== null || token !== "NULL") {
+      // Store the token in the SecureStore (user device) as key-value pair
+      await SecureStore.setItemAsync("token", token);
+    } else {
+      // Remove the token from the SecureStore (user device)
+      await SecureStore.deleteItemAsync("token");
+    }
+  } catch (error) {
+    console.error("Failed to set token:", error);
+    throw error;
   }
 }
 
@@ -37,13 +42,18 @@ export async function setToken(newToken: string) {
  * @returns {Promise<string | null>} The token if it exists, otherwise null.
  */
 export async function getToken(): Promise<string | null> {
-  // Check if the token is already set
-  if (token != null) {
+  try {
+    // Check if the token is already set
+    if (token != null) {
+      return token;
+    }
+
+    // Get the token from the SecureStore (user device)
+    token = await SecureStore.getItemAsync("token");
+
     return token;
+  } catch (error) {
+    console.error("Failed to get token:", error);
+    throw error;
   }
-
-  // Get the token from the SecureStore (user device)
-  token = await SecureStore.getItemAsync("token");
-
-  return token;
 }
