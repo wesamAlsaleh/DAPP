@@ -106,9 +106,11 @@ export default function drivers() {
 
           {/* search bar */}
           <CustomInputField
-            label="Search drivers"
+            label="Search about driver"
+            labelStyle="text-gray-600"
             icon={icons.search}
             value={searchQuery}
+            placeholder="Search drivers by name or email"
             onChangeText={(text) => setSearchQuery(text)}
             containerStyle="bg-primary-100"
           />
