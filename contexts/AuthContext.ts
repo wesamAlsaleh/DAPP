@@ -1,13 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
-// create an interface for the user data
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-}
+// import the User interface type from the types folder
+import { User } from "@/types/user";
 
 // create an interface for the AuthContext
 interface AuthContextType {

@@ -41,11 +41,11 @@ const getTextVariantStyle = (variant: ButtonProps["textVariant"]) => {
     case "primary":
       return "text-black";
     case "secondary":
-      return "text-grey-100";
+      return "text-grey-300";
     case "danger":
-      return "text-red-100";
+      return "text-red-500";
     case "success":
-      return "text-green-100";
+      return "text-green-500";
     default:
       return "text-white";
   }

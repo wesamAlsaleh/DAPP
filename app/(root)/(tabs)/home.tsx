@@ -45,15 +45,16 @@ export default function home() {
       </View>
 
       {/* main section  */}
-      <View className="flex-1">
+      <View>
+        {/* Current */}
+
         {/* route to map page */}
         <CustomButton
           onPress={() => {
-            console.log("View Map");
+            console.log("View Map button pressed");
           }}
-          title="View Map"
+          title="Show drivers"
           bgVariant="secondary"
-          textVariant="default"
           className="m-2"
         />
       </View>
