@@ -103,6 +103,9 @@ export async function loadUser(): Promise<User> {
       },
     });
 
+    // log the user data to the console
+    console.log("User data:", user);
+
     // return the user data
     return user;
   } catch (error) {
