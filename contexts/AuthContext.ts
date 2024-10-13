@@ -13,16 +13,16 @@ interface User {
 interface AuthContextType {
   user: User | null;
   setUser: Dispatch<SetStateAction<User | null>>;
-  // loading: boolean;
-  // setLoading: Dispatch<SetStateAction<boolean>>;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 // create a context to store the user data and the setUser function
 const AuthContext = createContext<AuthContextType>({
   user: null,
   setUser: () => {},
-  // loading: true,
-  // setLoading: () => {},
+  loading: true,
+  setLoading: () => {},
 });
 
 // export a custom hook to use the AuthContext
