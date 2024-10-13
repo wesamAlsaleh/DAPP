@@ -23,22 +23,18 @@ import CustomButton from "@/components/CustomButton";
 // import the Dimensions API to get the window dimensions
 const { width, height } = Dimensions.get("window");
 
-// Mock data for drivers
-const drivers = [
-  { id: 1, name: "Driver 1", latitude: 37.78825, longitude: -122.4324 },
-  { id: 2, name: "Driver 2", latitude: 37.78925, longitude: -122.4344 },
-  { id: 3, name: "Driver 3", latitude: 37.78725, longitude: -122.4304 },
-];
-
 export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
 
   return (
     // <ProtectedRoute>
-    <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
+    <SafeAreaView
+      style={GlobalStyles.droidSafeArea}
+      className="bg-general-500 px-4"
+    >
       {/* header section */}
-      <View className=" items-start justify-center p-5">
+      <View className=" items-start justify-center mt-2">
         <Text className="text-black font-bold text-2xl">
           Welcome back, <Text className="text-primary-500">{user?.name}</Text>
         </Text>
@@ -46,7 +42,14 @@ export default function home() {
 
       {/* main section  */}
       <View>
-        {/* Current */}
+        {/* Admin feater */}
+        {user?.role === "admin" ? (
+          <>
+            <View className="bg-green-200 rounded-lg shadow-md mt-4">
+              <Text className="text-xl text-center">This is Admin user</Text>
+            </View>
+          </>
+        ) : null}
 
         {/* route to map page */}
         <CustomButton
@@ -55,7 +58,7 @@ export default function home() {
           }}
           title="Show drivers"
           bgVariant="secondary"
-          className="m-2"
+          className="mt-2"
         />
       </View>
 
