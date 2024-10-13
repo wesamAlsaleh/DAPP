@@ -120,11 +120,14 @@ export default function drivers() {
               data={filteredDrivers}
               renderItem={renderDriverItem}
               keyExtractor={(item) => item.id.toString()}
+              keyboardShouldPersistTaps="handled" // this will allow the keyboard to be dismissed when tapping outside the input field
+              contentContainerStyle={{ paddingBottom: 100 }} // increase the padding to make space for the bottom bar
               ListEmptyComponent={
                 <Text className="text-center text-xl font-bold text-gray-500 mt-4">
                   No drivers found
                 </Text>
               }
+              ListFooterComponent={<View style={{ height: 120 }} />} // add an explicit spacer to push the last item above the bottom bar (solution for the bottom bar covering the last item)
             />
           )}
         </View>
