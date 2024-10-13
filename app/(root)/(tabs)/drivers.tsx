@@ -91,8 +91,9 @@ export default function drivers() {
   return (
     <ProtectedRoute>
       <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-white">
-        {/* header section */}
+        {/* page container */}
         <View className="px-4 py-6">
+          {/* header section */}
           <Text className="text-2xl font-bold mb-4">Drivers List</Text>
 
           {/* search bar */}
