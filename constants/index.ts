@@ -27,6 +27,9 @@ import target from "@/assets/icons/target.png";
 import to from "@/assets/icons/to.png";
 import user2 from "@/assets/icons/user2.png";
 import settings from "@/assets/icons/settings1.png";
+import computer_calendar from "@/assets/icons/computer-calander.png";
+import computer_email from "@/assets/icons/computer-email.png";
+import calendar from "@/assets/icons/calendar.png";
 
 // Import the images
 // import check from "@/assets/images/check.png";
@@ -74,4 +77,7 @@ export const icons = {
   email1,
   user2,
   settings,
+  calendar,
+  computer_calendar,
+  computer_email,
 };

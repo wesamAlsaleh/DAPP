@@ -71,7 +71,11 @@ export default function drivers() {
 
         {/* email container */}
         <View className="flex-row items-center mt-2">
-          <Image source={icons.email} alt="email icon" className="w-9 h-9" />
+          <Image
+            source={icons.computer_email}
+            alt="email icon"
+            className="w-8 h-8"
+          />
           <Text className="text-gray-600 ml-2 first-line:text-base">
             {item.email}
           </Text>
@@ -79,7 +83,11 @@ export default function drivers() {
 
         {/* created at container */}
         <View className="flex-row items-center mt-2">
-          <Image source={icons.person} alt="email icon" className="w-9 h-9" />
+          <Image
+            source={icons.computer_calendar}
+            alt="email icon"
+            className="w-8 h-8"
+          />
           <Text className="text-gray-600 ml-2 text-base">
             Joined: {new Date(item.created_at).toLocaleDateString()}
           </Text>
