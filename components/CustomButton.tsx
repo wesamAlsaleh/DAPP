@@ -73,7 +73,7 @@ export default function CustomButton({
   IconRight,
   className,
   ...props
-}: ButtonProps) {
+}: ButtonProps): JSX.Element {
   return (
     <TouchableOpacity
       onPress={onPress}

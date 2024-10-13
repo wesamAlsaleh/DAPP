@@ -33,7 +33,7 @@ export default function home() {
       {/* page container */}
       <View className="px-4 py-6">
         {/* header section */}
-        <View className=" items-start justify-center mt-2">
+        <View className=" items-start justify-center">
           <Text className="text-black font-bold text-2xl">
             Welcome back, <Text className="text-primary-500">{user?.name}</Text>
           </Text>

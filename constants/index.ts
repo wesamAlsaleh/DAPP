@@ -7,6 +7,7 @@ import checkmark from "@/assets/icons/check.png";
 import close from "@/assets/icons/close.png";
 import dollar from "@/assets/icons/dollar.png";
 import email from "@/assets/icons/email.png";
+import email1 from "@/assets/icons/email1.png";
 import eyecross from "@/assets/icons/eyecross.png";
 import google from "@/assets/icons/google.png";
 import home from "@/assets/icons/home.png";
@@ -24,6 +25,8 @@ import selectedMarker from "@/assets/icons/selected-marker.png";
 import star from "@/assets/icons/star.png";
 import target from "@/assets/icons/target.png";
 import to from "@/assets/icons/to.png";
+import user2 from "@/assets/icons/user2.png";
+import settings from "@/assets/icons/settings1.png";
 
 // Import the images
 // import check from "@/assets/images/check.png";
@@ -68,4 +71,7 @@ export const icons = {
   star,
   target,
   to,
+  email1,
+  user2,
+  settings,
 };
