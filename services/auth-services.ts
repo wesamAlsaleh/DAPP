@@ -4,16 +4,10 @@ import axios from "axios";
 // import token service functions to store and retrieve the token from the secure store (user device)
 import { getToken, setToken } from "./token-service";
 
-// const API_BASE_URL = "http://127.0.0.1:8000/api"; // Update this as needed
-const API_BASE_URL = "http://dapp.bableto.site/api"; // Update this as needed
+// import the User interface type from the types folder
+import { User } from "@/types/user";
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-}
+const API_BASE_URL = "http://dapp.bableto.site/api"; // Update this as needed
 
 /**
  *  Registers a new user with the provided name, email and password.
