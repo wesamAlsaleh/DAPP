@@ -32,26 +32,14 @@ export default function home() {
   const { user } = useAuth();
 
   return (
-    <ProtectedRoute>
-      <SafeAreaView
-        style={GlobalStyles.droidSafeArea}
-        className="bg-general-500"
-      >
-        <View className="bg-general-500 items-start justify-center p-5">
-          <Text className="text-black font-bold text-2xl">
-            Welcome back <Text className="text-primary-500">{user?.name}</Text>{" "}
-            👋
-          </Text>
-        </View>
-      </SafeAreaView>
-    </ProtectedRoute>
+    // <ProtectedRoute>
+    <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
+      <View className="bg-general-500 items-start justify-center p-5">
+        <Text className="text-black font-bold text-2xl">
+          Welcome back <Text className="text-primary-500">{user?.name}</Text> 👋
+        </Text>
+      </View>
+    </SafeAreaView>
+    // </ProtectedRoute>
   );
 }
-
-// map styles
-const styles = StyleSheet.create({
-  map: {
-    width: width,
-    height: height - 100,
-  },
-});
