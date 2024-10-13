@@ -16,8 +16,10 @@ declare interface ButtonProps extends TouchableOpacityProps {
  */
 const getBgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
   switch (variant) {
+    case "primary":
+      return "bg-primary-500";
     case "secondary":
-      return "bg-grey-500";
+      return "bg-slate-500";
     case "danger":
       return "bg-red-500";
     case "success":
@@ -25,7 +27,7 @@ const getBgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
     case "outline":
       return "bg-transparent border border-neutral-300 border-[0.5px]";
     default:
-      return "bg-DolphinGray";
+      return "bg-primary-500";
   }
 };
 
@@ -85,7 +87,7 @@ export default function CustomButton({
 
       {/* button text */}
       <Text
-        className={`text-white text-lg font-bold ${getTextVariantStyle(
+        className={`text-white text-lg font-bold  ${getTextVariantStyle(
           textVariant
         )}`}
       >

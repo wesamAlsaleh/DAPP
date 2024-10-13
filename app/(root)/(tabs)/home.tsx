@@ -40,7 +40,7 @@ export default function home() {
       {/* header section */}
       <View className=" items-start justify-center p-5">
         <Text className="text-black font-bold text-2xl">
-          Welcome back <Text className="text-primary-500">{user?.name}</Text> 👋
+          Welcome back, <Text className="text-primary-500">{user?.name}</Text>
         </Text>
       </View>
 
@@ -48,10 +48,12 @@ export default function home() {
       <View className="flex-1">
         {/* route to map page */}
         <CustomButton
-          onPress={() => {}}
+          onPress={() => {
+            console.log("View Map");
+          }}
           title="View Map"
-          bgVariant="primary"
-          textVariant="primary"
+          bgVariant="secondary"
+          textVariant="default"
           className="m-2"
         />
       </View>
