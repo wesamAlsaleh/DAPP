@@ -20,6 +20,11 @@ const TabIcon = ({
 }): JSX.Element => {
   return (
     //Name and icon container
+    // <View
+    //   className={`flex flex-row items-center justify-center ${
+    //     focused ? "bg-general-300" : ""
+    //   }`}
+    // >
     <View
       className={`flex flex-row items-center justify-center ${
         focused ? "bg-general-300" : ""
@@ -36,7 +41,7 @@ const TabIcon = ({
           source={src}
           tintColor={"white"}
           resizeMode="contain"
-          className="w-7 h-7"
+          className="w-7 h-7 overflow-hidden"
         />
       </View>
     </View>
