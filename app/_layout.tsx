@@ -52,8 +52,10 @@ export default function AppLayout() {
         // Set the user in the state
         setUser(authenticatedUser);
       } catch (error) {
-        console.error("Failed to load user from AppLayout:", error);
-        setUser(null); // Ensure user is null on failure
+        setUser(null); // Ensure user is null on failure {null will be used to check if the user is authenticated}
+        throw console.warn(
+          "No token found, the user will be null on the context to indicate that the user is not authenticated in the index.tsx file."
+        );
       } finally {
         setLoading(false); // Set loading to false
       }

@@ -112,8 +112,7 @@ export async function loadUser(): Promise<User> {
     // return the user data
     return user;
   } catch (error) {
-    console.error("Failed to load user:", error);
-    throw error;
+    throw console.log("No token found to load user");
   }
 }
 

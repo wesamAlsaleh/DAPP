@@ -7,8 +7,7 @@ export default function Index() {
   // get the user data from the AuthContext
   const { user, loading } = useAuth();
 
-  // I got the null user from the AuthContext
-  console.log("User from the index:", user);
+  // console.log("User from the index:", user);
 
   // If still loading, return null or a loading indicator
   if (loading) {
