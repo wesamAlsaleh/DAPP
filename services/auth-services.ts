@@ -71,7 +71,7 @@ export async function login(email: string, password: string) {
       await setToken(token);
     }
   } catch (error) {
-    console.error("Login failed:", error);
+    console.error("Login service failed 🔴");
 
     // Optionally, you can throw the error to be handled elsewhere
     throw error;

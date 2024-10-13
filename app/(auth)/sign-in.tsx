@@ -24,7 +24,7 @@ const SignIn = () => {
   });
 
   // Error state
-  const [error, setError] = useState({});
+  const [error, setError] = useState({ message: "" });
 
   // router to navigate to other pages
   const router = useRouter();
@@ -49,7 +49,10 @@ const SignIn = () => {
       // After the user is logged in, route to the home page
       router.push("/(root)/(tabs)/home");
     } catch (error) {
-      console.error("Failed to sign in:", error);
+      setError({
+        message:
+          "* An unexpected error occurred. Please check your email and password.",
+      });
     }
   }, [formValues.email, formValues.password]);
 
@@ -91,6 +94,11 @@ const SignIn = () => {
             secureTextEntry={true}
           />
 
+          {/* error message */}
+          <Text className="text-red-500 text-sm mt-2 text-start font-bold">
+            {error.message}
+          </Text>
+
           {/* sign up button */}
           <CustomButton
             title="Sign In"
@@ -98,7 +106,7 @@ const SignIn = () => {
             className="mt-6"
           />
 
-          {/* TODO: sign up link if there is client purposes */}
+          {/* sign up link */}
           <Link
             href="/sign-up"
             className="text-center text-lg font-JakartaSemiBold text-general-200 mt-10"
@@ -111,8 +119,6 @@ const SignIn = () => {
           </Link>
         </View>
       </View>
-
-      {/* TODO:  modal after success  */}
     </ScrollView>
   );
 };
