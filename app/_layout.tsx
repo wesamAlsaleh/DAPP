@@ -11,17 +11,11 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 
+// import user interface
+import { User } from "@/types/user";
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-// create an interface for the user data
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-}
 
 export default function AppLayout() {
   // Authenticated user state
