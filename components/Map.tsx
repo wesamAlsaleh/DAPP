@@ -7,22 +7,38 @@ import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 // import the constants
 import { icons } from "@/constants";
 import { User } from "@/types/user";
+import { getDrivers } from "@/services/driver-services";
 
 export default function Map() {
+  // Drivers state
   const [drivers, setDrivers] = useState<User[]>([]);
 
-  // In a real application, you would fetch drivers data here
+  // Loading state
+  const [loading, setLoading] = useState(true);
+
+  // fetch drivers from the API
   useEffect(() => {
-    // Fetch drivers data from your API
-    // setDrivers(fetchedDrivers);
+    const fetchDrivers = async () => {
+      try {
+        const driversFromDB = await getDrivers();
+
+        setDrivers(await driversFromDB);
+      } catch (error) {
+        console.error("Error fetching drivers", error);
+      } finally {
+        setLoading(false); // This runs regardless of success or error
+      }
+    };
+
+    fetchDrivers();
   }, []);
 
   return (
-    <View>
+    <View className="my-4 ">
       <MapView
         provider={PROVIDER_DEFAULT} // Use the default map provider (e.g., Google Maps if set up properly)
         showsCompass={true} // Display a compass on the map
-        className="w-full h-full"
+        className="w-full h-full rounded-2xl"
         showsPointsOfInterest={false} // Disable points of interest (like restaurants, landmarks)
         initialRegion={{
           latitude: 37.78825,
@@ -33,17 +49,17 @@ export default function Map() {
         showsUserLocation={true} // Enable the display of the user's current location on the map
         showsMyLocationButton={true} // Show a button to recenter the map to the user's location
       >
-        {drivers.map((driver) => (
+        {/* {drivers.map((driver) => (
           <Marker
             key={driver.id}
             coordinate={{
-              latitude: driver.latitude,
-              longitude: driver.longitude,
+              latitude: driver.latitude!,
+              longitude: driver.longitude!,
             }}
             image={icons.marker}
             title={driver.name}
           />
-        ))}
+        ))} */}
       </MapView>
     </View>
   );

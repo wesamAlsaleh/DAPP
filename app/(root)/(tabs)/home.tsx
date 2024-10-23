@@ -60,7 +60,16 @@ export default function home() {
             bgVariant="secondary"
             className="mt-2"
           />
+
+          {/* Map Section */}
           {showMap && <Map />}
+
+          {/* Testing container  */}
+          <View className="mt-4 ">
+            <View className="flex items-center justify-center bg-yellow-400 rounded-lg h-[100px]">
+              <Text className="text-center  text-lg  ">After the map</Text>
+            </View>
+          </View>
         </View>
       </View>
     </SafeAreaView>
