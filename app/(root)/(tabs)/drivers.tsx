@@ -67,7 +67,8 @@ export default function drivers() {
   const renderDriverItem = ({ item }: any) => {
     return (
       <TouchableOpacity className="bg-white rounded-lg shadow-md p-4 mb-4">
-        <Text className="text-lg font-semibold">{item.name}</Text>
+        {/* Name Section */}
+        <Text className="text-lg font-bold text-gray-800">{item.name}</Text>
 
         {/* email container */}
         <View className="flex-row items-center mt-2">
@@ -91,6 +92,29 @@ export default function drivers() {
           <Text className="text-gray-600 ml-2 text-base">
             Joined: {new Date(item.created_at).toLocaleDateString()}
           </Text>
+        </View>
+
+        {/* status container */}
+        <View className="flex-row items-center mt-2 p-2 rounded-lg bg-gray-100">
+          <Image source={icons.status} alt="status icon" className="w-6 h-6" />
+
+          {item.status === "busy" && (
+            <Text className="text-red-600 ml-3 text-sm font-semibold">
+              Busy
+            </Text>
+          )}
+
+          {item.status === "available" && (
+            <Text className="text-green-600 ml-3 text-sm font-semibold">
+              Available
+            </Text>
+          )}
+
+          {item.status === "offline" && (
+            <Text className="text-blue-500 ml-3 text-sm font-semibold">
+              Offline
+            </Text>
+          )}
         </View>
       </TouchableOpacity>
     );
