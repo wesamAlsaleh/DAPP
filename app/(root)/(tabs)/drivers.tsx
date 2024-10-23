@@ -66,31 +66,57 @@ export default function drivers() {
   // render driver item to display the driver details on the flat list
   const renderDriverItem = ({ item }: any) => {
     return (
-      <TouchableOpacity className="bg-white rounded-lg shadow-md p-4 mb-4">
-        <Text className="text-lg font-semibold">{item.name}</Text>
+      <TouchableOpacity className="bg-white rounded-xl shadow-sm p-5 mb-4 border border-gray-200">
+        {/* Name Section */}
+        <Text className="text-lg font-bold text-gray-800">{item.name}</Text>
 
-        {/* email container */}
-        <View className="flex-row items-center mt-2">
+        {/* Email Container */}
+        <View className="flex-row items-center mt-3">
           <Image
             source={icons.computer_email}
             alt="email icon"
-            className="w-8 h-8"
+            className="w-6 h-6 opacity-70"
           />
-          <Text className="text-gray-600 ml-2 first-line:text-base">
+          <Text className="text-gray-700 ml-3 text-sm font-medium">
             {item.email}
           </Text>
         </View>
 
-        {/* created at container */}
-        <View className="flex-row items-center mt-2">
+        {/* Created At Container */}
+        <View className="flex-row items-center mt-3">
           <Image
             source={icons.computer_calendar}
-            alt="email icon"
-            className="w-8 h-8"
+            alt="calendar icon"
+            className="w-6 h-6 opacity-70"
           />
-          <Text className="text-gray-600 ml-2 text-base">
+          <Text className="text-gray-700 ml-3 text-sm font-medium">
             Joined: {new Date(item.created_at).toLocaleDateString()}
           </Text>
+        </View>
+
+        {/* Status Container */}
+        <View className="flex-row items-center mt-3 p-3 rounded-md bg-gray-50">
+          <Image
+            source={icons.status}
+            alt="status icon"
+            className="w-5 h-5 opacity-80"
+          />
+
+          {item.status === "busy" && (
+            <Text className="text-red-500 ml-3 text-sm font-medium">Busy</Text>
+          )}
+
+          {item.status === "available" && (
+            <Text className="text-green-500 ml-3 text-sm font-medium">
+              Available
+            </Text>
+          )}
+
+          {item.status === "offline" && (
+            <Text className="text-gray-500 ml-3 text-sm font-medium">
+              Offline
+            </Text>
+          )}
         </View>
       </TouchableOpacity>
     );
