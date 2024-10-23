@@ -4,9 +4,11 @@ interface User {
   name: string;
   email: string;
   role: string;
+  status: "available" | "offline" | "busy"; // New field for user status
+  latitude: number | null; // New field for user's latitude
+  longitude: number | null; // New field for user's longitude
   created_at: string;
   updated_at: string;
-  //TODO: status
 }
 
 export { User };

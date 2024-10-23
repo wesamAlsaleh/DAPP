@@ -1,8 +1,22 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-// import the map staff
-import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
+// import the driver store and the location store from the store folder
+import { useDriverStore, useLocationStore } from "@/store";
+
+// import the map view from react native maps
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+
+// import the MarkerData type from the types/type.ts file
+import { MarkerData } from "@/types/types";
+import { User } from "@/types/user";
+
+// import the calculateRegion and generateMarkersFromData functions from the map.ts file
+import {
+  // calculateDriverTimes,
+  // generateMarkersFromData,
+  calculateRegion,
+} from "@/lib/map";
 
 /**
  * Define and export the Map component
@@ -12,8 +26,18 @@ export default function Map() {
   // Access Google API key from environment variables
   const googleApiUrl = process.env.EXPO_PUBLIC_GOOGLE_KEY;
 
-  // Placeholder for user location
+  // Get the user's current location from the zustand store
+  const {
+    userLatitude,
+    userLongitude,
+    destinationLatitude,
+    destinationLongitude,
+  } = useLocationStore();
+
+  // Calculate the region based on the user's current location and the destination
   const region = {};
+
+  // TODO: Fetch the drivers data from the backend
 
   return (
     <MapView

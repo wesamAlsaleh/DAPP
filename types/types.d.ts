@@ -2,7 +2,30 @@
 
 import { TextInputProps, TouchableOpacityProps } from "react-native";
 
-// Drivers Data
+// import User interface
+import { User } from "./user";
+
+/*
+{
+  "id": 2,
+  "name": "Terry Ali",
+  "email": "hwunsch@example.org",
+  "email_verified_at": "2024-10-23T19:26:05.000000Z",
+  "role": "driver",
+  "status": "busy",
+  "latitude": "48.6478110",
+  "longitude": "-8.9138260",
+  "created_at": "2024-10-23T19:26:05.000000Z",
+  "updated_at": "2024-10-23T19:26:05.000000Z"
+}
+*/
+
+declare interface Driver extends User {
+  latitude: number; // Driver's latitude
+  longitude: number; // Driver's longitude
+  status: "available" | "offline" | "busy"; // Driver's current status
+}
+
 declare interface MarkerData {
   latitude: number;
   longitude: number;
@@ -10,7 +33,7 @@ declare interface MarkerData {
   name: string;
   email: string;
   role: string;
-  //TODO: status
+  status: "available" | "offline" | "busy"; // New field for status
 }
 
 declare interface LocationStore {
