@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
 // import the driver store and the location store from the store folder
@@ -9,15 +9,11 @@ import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 
 // import the MarkerData & MapProps type from the types/type.ts file
 import { MapProps, MarkerData } from "@/types/types";
-import { User } from "@/types/user";
 
 // import the calculateRegion and generateMarkersFromData functions from the map.ts file
-import { calculateRegion } from "@/lib/map";
+import { calculateRegion, generateMarkersFromData } from "@/lib/map";
+import { icons } from "@/constants";
 
-/**
- * Define and export the Map component
- * @returns MapView component with various properties and customizations
- */
 export default function Map({ drivers }: MapProps) {
   // Access Google API key from environment variables
   const googleApiUrl = process.env.EXPO_PUBLIC_GOOGLE_KEY;
@@ -25,8 +21,33 @@ export default function Map({ drivers }: MapProps) {
   // Get the user's current location from the zustand store
   const { userLatitude, userLongitude } = useLocationStore();
 
+  // Get the drivers functions from the store
+  const { setDrivers, selectedDriver, setSelectedDriver } = useDriverStore();
+
   // Calculate the region based on the user's current location and the destination
   const region = calculateRegion({ userLongitude, userLatitude });
+
+  // Markers state "array of marker data type"
+  const [markers, setMarkers] = useState<MarkerData[]>([]);
+
+  // Set the Available driver in the store "from the home page"
+  useEffect(() => {
+    // if we have the drivers
+    if (Array.isArray(drivers)) {
+      // check the user location
+      if (!userLatitude || !userLongitude) return;
+
+      // Create the markers on the map (which is in our case the drivers as markers)
+      const newMarkers = generateMarkersFromData({
+        data: drivers,
+        userLatitude,
+        userLongitude,
+      });
+
+      // Set the new markers
+      setMarkers(newMarkers);
+    }
+  }, [drivers]);
 
   return (
     <MapView
@@ -40,6 +61,22 @@ export default function Map({ drivers }: MapProps) {
       showsUserLocation={true} // Enable the display of the user's current location on the map
       showsMyLocationButton={true} // Show a button to recenter the map to the user's location
       userInterfaceStyle="light" // Set the UI style of the map to a light theme
-    />
+    >
+      {markers.map((marker) => {
+        return (
+          <Marker
+            key={marker.id}
+            coordinate={{
+              latitude: marker.latitude,
+              longitude: marker.longitude,
+            }}
+            title={marker.name}
+            image={
+              selectedDriver === marker.id ? icons.selectedMarker : icons.marker
+            }
+          />
+        );
+      })}
+    </MapView>
   );
 }

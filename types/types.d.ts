@@ -33,8 +33,8 @@ declare interface MarkerData extends User {
   email: string;
   role: string;
   status: "available" | "offline" | "busy";
-  created_at?: string;
-  updated_at?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 declare interface LocationStore {

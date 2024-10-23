@@ -90,6 +90,7 @@ export default function home() {
   useEffect(() => {
     const fetchDrivers = async () => {
       try {
+        // TODO: fetch the available only!
         const driversFromDB = await getDrivers();
 
         setDrivers(await driversFromDB);

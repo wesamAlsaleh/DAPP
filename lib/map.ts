@@ -26,6 +26,8 @@ export const generateMarkersFromData = ({
       email: driver.email,
       role: driver.role,
       status: driver.status,
+      created_at: driver.created_at,
+      updated_at: driver.updated_at,
     };
   });
 };
