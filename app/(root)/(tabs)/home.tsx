@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -21,12 +21,60 @@ import { useAuth } from "@/contexts/AuthContext";
 import CustomButton from "@/components/CustomButton";
 import Map from "@/components/Map";
 
+// import location store
+import { useLocationStore } from "@/store";
+
+// import location stuff
+import * as Location from "expo-location";
+
 // import the Dimensions API to get the window dimensions
 const { width, height } = Dimensions.get("window");
 
 export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
+
+  // get the location store setter functions
+  const { setUserLocation, setDestinationLocation } = useLocationStore();
+
+  // state to check if the user has granted permission to access their location
+  const [hasPermission, setHasPermission] = useState(false);
+
+  // useEffect to grant the user permission to access their location
+  useEffect(() => {
+    // function to request location permission and get the user's current location
+    const requestLocationPermission = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      // if the user has not granted permission, set the hasPermission state to false
+      if (status !== "granted") {
+        setHasPermission(false);
+        return;
+      }
+
+      // if the user has granted permission, set the hasPermission state to true
+      setHasPermission(true);
+
+      // get the user's current location
+      let location = await Location.getCurrentPositionAsync();
+
+      // Extract the latitude and longitude from the location object
+      const address = await Location.reverseGeocodeAsync({
+        latitude: location.coords?.latitude!,
+        longitude: location.coords?.longitude!,
+      });
+
+      // set the user's current location in the zustand store
+      setUserLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        address: `${address[0].name}, ${address[0].region}, ${address[0].country}`,
+      });
+    };
+
+    // call the function to request location permission and get the user's current location
+    requestLocationPermission();
+  }, []);
 
   return (
     // <ProtectedRoute>

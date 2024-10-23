@@ -2,7 +2,7 @@
 
 import { TextInputProps, TouchableOpacityProps } from "react-native";
 
-// Drivers as a marker
+// Drivers Data
 declare interface MarkerData {
   latitude: number;
   longitude: number;
@@ -12,21 +12,6 @@ declare interface MarkerData {
   role: string;
   //TODO: status
 }
-
-// declare interface MarkerData {
-//   latitude: number;
-//   longitude: number;
-//   title: string;
-//   id: number;
-//   //   profile_image_url: string;
-//   //   car_image_url: string;
-//   //   car_seats: number;
-//   //   rating: number; // Keep it as number for better consistency
-//   first_name: string;
-//   last_name: string;
-//   time?: number; // Keep optional if some drivers may not have it
-//   //   price?: number; // Assuming price is numerical
-// }
 
 declare interface LocationStore {
   userLatitude: number | null;
@@ -62,3 +47,18 @@ declare interface DriverStore {
   setDrivers: (drivers: MarkerData[]) => void;
   clearSelectedDriver: () => void;
 }
+
+// declare interface MarkerData {
+//   latitude: number;
+//   longitude: number;
+//   title: string;
+//   id: number;
+//   //   profile_image_url: string;
+//   //   car_image_url: string;
+//   //   car_seats: number;
+//   //   rating: number; // Keep it as number for better consistency
+//   first_name: string;
+//   last_name: string;
+//   time?: number; // Keep optional if some drivers may not have it
+//   //   price?: number; // Assuming price is numerical
+// }
