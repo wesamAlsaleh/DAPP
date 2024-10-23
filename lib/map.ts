@@ -1,5 +1,8 @@
-import { Driver, MarkerData } from "@/types/types";
+// import types
+import { MarkerData } from "@/types/types";
+import { User } from "@/types/user";
 
+// TODO: Update this if needed!
 const directionsAPI = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 /**
@@ -16,7 +19,7 @@ export const generateMarkersFromData = ({
   userLatitude,
   userLongitude,
 }: {
-  data: Driver[];
+  data: User[];
   userLatitude: number;
   userLongitude: number;
 }): MarkerData[] => {
@@ -25,11 +28,13 @@ export const generateMarkersFromData = ({
     const lngOffset = (Math.random() - 0.5) * 0.01; // Random offset between -0.005 and 0.005 'mock'
 
     return {
-      id: driver.driver_id, // Adding the 'id' field as required by MarkerData
+      id: driver.id, // 'id' is coming from Driver's 'driver_id'
       latitude: userLatitude + latOffset,
       longitude: userLongitude + lngOffset,
-      title: `${driver.first_name} ${driver.last_name}`,
-      ...driver,
+      name: driver.name, // Map 'driver_name' to 'name'
+      email: driver.email, // Map 'driver_email' to 'email'
+      role: "driver", // Assuming 'role' is static as "driver"
+      status: driver.status, // Map 'status' directly from Driver
     };
   });
 };
@@ -54,7 +59,7 @@ export const calculateRegion = ({
   userLongitude: number | null;
   destinationLatitude?: number | null;
   destinationLongitude?: number | null;
-}) => {
+}): object => {
   if (!userLatitude || !userLongitude) {
     return {
       latitude: 37.78825,
@@ -115,7 +120,9 @@ export const calculateDriverTimes = async ({
   userLongitude: number | null;
   destinationLatitude: number | null;
   destinationLongitude: number | null;
-}) => {
+}): Promise<
+  Array<MarkerData & { time: number; price: string }> | undefined
+> => {
   if (
     !userLatitude ||
     !userLongitude ||

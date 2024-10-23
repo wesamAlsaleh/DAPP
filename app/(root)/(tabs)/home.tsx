@@ -30,6 +30,10 @@ import * as Location from "expo-location";
 // import the Dimensions API to get the window dimensions
 const { width, height } = Dimensions.get("window");
 
+// import get drivers function
+import { getDrivers } from "@/services/driver-services";
+import { User } from "@/types/user";
+
 export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
@@ -39,6 +43,12 @@ export default function home() {
 
   // state to check if the user has granted permission to access their location
   const [hasPermission, setHasPermission] = useState(false);
+
+  // Drivers state
+  const [drivers, setDrivers] = useState<User[]>([]);
+
+  // Loading state
+  const [loading, setLoading] = useState(true);
 
   // useEffect to grant the user permission to access their location
   useEffect(() => {
@@ -76,6 +86,23 @@ export default function home() {
     requestLocationPermission();
   }, []);
 
+  //  Fetch the drivers data from the backend
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      try {
+        const driversFromDB = await getDrivers();
+
+        setDrivers(await driversFromDB);
+      } catch (error) {
+        console.error("Error fetching drivers", error);
+      } finally {
+        setLoading(false); // This runs regardless of success or error
+      }
+    };
+
+    fetchDrivers();
+  }, []);
+
   return (
     // <ProtectedRoute>
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
@@ -106,7 +133,7 @@ export default function home() {
 
           {/* map alone container */}
           <View className="flex flex-row items-center bg-transparent h-[300]">
-            <Map />
+            <Map drivers={drivers} />
           </View>
         </View>
 

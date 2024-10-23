@@ -6,6 +6,7 @@ import { TextInputProps, TouchableOpacityProps } from "react-native";
 import { User } from "./user";
 
 /*
+User data
 {
   "id": 2,
   "name": "Terry Ali",
@@ -20,10 +21,8 @@ import { User } from "./user";
 }
 */
 
-declare interface Driver extends User {
-  latitude: number; // Driver's latitude
-  longitude: number; // Driver's longitude
-  status: "available" | "offline" | "busy"; // Driver's current status
+declare interface MapProps {
+  drivers: User[]; // Define the prop type
 }
 
 declare interface MarkerData {

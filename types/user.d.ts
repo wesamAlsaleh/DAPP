@@ -1,6 +1,6 @@
 // create an interface for the user data
 interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   role: string;
