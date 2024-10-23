@@ -19,6 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 // import the Custom components
 import CustomButton from "@/components/CustomButton";
+import Map from "@/components/Map";
 
 // import the Dimensions API to get the window dimensions
 const { width, height } = Dimensions.get("window");
@@ -32,34 +33,36 @@ export default function home() {
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
       {/* page container */}
       <View className="px-4 py-6">
-        {/* header section */}
+        {/* -------------------- header section -------------------- */}
         <View className=" items-start justify-center">
           <Text className="text-black font-bold text-2xl">
             Welcome back, <Text className="text-primary-500">{user?.name}</Text>
           </Text>
         </View>
 
-        {/* main section  */}
+        {/* -------------------- main section -------------------- */}
+        {/* Admin feature container */}
         <View>
-          {/* Admin feater */}
           {user?.role === "admin" ? (
-            <>
-              <View className="bg-green-200 rounded-lg shadow-md mt-4">
-                <Text className="text-xl text-center">This is Admin user</Text>
-              </View>
-            </>
+            <View className="bg-green-200 rounded-lg shadow-md mt-4">
+              <Text className="text-xl text-center">This is Admin user</Text>
+            </View>
           ) : null}
-
-          {/* route to map page */}
-          <CustomButton
-            onPress={() => {
-              console.log("View Map button pressed");
-            }}
-            title="Show drivers on map (coming soon)"
-            bgVariant="secondary"
-            className="mt-2"
-          />
         </View>
+
+        {/* map + text container */}
+        <View>
+          <Text className="mb-3 mt-5 text-xl font-semibold">
+            Your Current Location
+          </Text>
+
+          {/* map alone container */}
+          <View className="flex flex-row items-center bg-transparent h-[300]">
+            <Map />
+          </View>
+        </View>
+
+        {/* end of page container  */}
       </View>
     </SafeAreaView>
     // </ProtectedRoute>
