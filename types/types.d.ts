@@ -25,14 +25,16 @@ declare interface MapProps {
   drivers: User[]; // Define the prop type
 }
 
-declare interface MarkerData {
+declare interface MarkerData extends User {
   latitude: number;
   longitude: number;
   id: number;
   name: string;
   email: string;
   role: string;
-  status: "available" | "offline" | "busy"; // New field for status
+  status: "available" | "offline" | "busy";
+  created_at?: string;
+  updated_at?: string;
 }
 
 declare interface LocationStore {

@@ -39,7 +39,7 @@ export default function home() {
   const { user } = useAuth();
 
   // get the location store setter functions
-  const { setUserLocation, setDestinationLocation } = useLocationStore();
+  const { setUserLocation } = useLocationStore();
 
   // state to check if the user has granted permission to access their location
   const [hasPermission, setHasPermission] = useState(false);

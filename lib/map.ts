@@ -5,21 +5,12 @@ import { User } from "@/types/user";
 // TODO: Update this if needed!
 const directionsAPI = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
-/**
- * Generates marker data for drivers based on user location.
- *
- * @param {Object} params - The parameters for generating markers.
- * @param {Driver[]} params.data - Array of driver data.
- * @param {number} params.userLatitude - The user's latitude.
- * @param {number} params.userLongitude - The user's longitude.
- * @returns {MarkerData[]} An array of MarkerData objects for each driver.
- */
 export const generateMarkersFromData = ({
   data,
   userLatitude,
   userLongitude,
 }: {
-  data: User[];
+  data: User[]; // data of type user
   userLatitude: number;
   userLongitude: number;
 }): MarkerData[] => {
@@ -28,13 +19,13 @@ export const generateMarkersFromData = ({
     const lngOffset = (Math.random() - 0.5) * 0.01; // Random offset between -0.005 and 0.005 'mock'
 
     return {
-      id: driver.id, // 'id' is coming from Driver's 'driver_id'
+      id: driver.id,
       latitude: userLatitude + latOffset,
       longitude: userLongitude + lngOffset,
-      name: driver.name, // Map 'driver_name' to 'name'
-      email: driver.email, // Map 'driver_email' to 'email'
-      role: "driver", // Assuming 'role' is static as "driver"
-      status: driver.status, // Map 'status' directly from Driver
+      name: driver.name,
+      email: driver.email,
+      role: driver.role,
+      status: driver.status,
     };
   });
 };
