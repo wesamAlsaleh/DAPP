@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -60,6 +61,7 @@ export default function home() {
     longitude: number;
   } | null>(null);
 
+  // Log the user location
   // console.log(userLocation);
 
   // Request permission to access location
@@ -139,47 +141,48 @@ export default function home() {
   }, []); // Add an empty dependency array to run it once when the component mounts
 
   return (
-    // <ProtectedRoute>
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
-      {/* page container */}
-      <View className="px-4 py-6">
-        {/* header section */}
-        <View className=" items-start justify-center">
-          <Text className="text-black font-bold text-2xl">
-            Welcome back, <Text className="text-primary-500">{user?.name}</Text>
-          </Text>
-        </View>
-
-        {/* main section  */}
+      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 100 }}>
+        {/* page container */}
         <View>
-          {/* Admin feater */}
-          {user?.role === "admin" ? (
-            <>
-              <DriversCountWidget driversCount={drivers.length} />
-            </>
-          ) : null}
+          {/* header section */}
+          <View className=" items-start justify-center">
+            <Text className="text-black font-bold text-2xl">
+              Welcome back,{" "}
+              <Text className="text-primary-600">{user?.name}</Text>
+            </Text>
+          </View>
 
-          {/* route to map page */}
-          <CustomButton
-            onPress={() => setShowMap(!showMap)}
-            title={showMap ? "Hide Map" : "Show drivers on map"}
-            bgVariant="secondary"
-            className="mt-2"
-          />
+          {/* main section  */}
+          <View>
+            {/* Admin Widgets */}
+            {user?.role === "admin" ? (
+              <>
+                <DriversCountWidget driversCount={drivers.length} />
+              </>
+            ) : null}
 
-          {/* Map Section */}
-          {showMap ? (
-            loading ? (
-              // Display loading spinner if still loading
-              <LoadingSpinner indicatorMessage="Loading drivers..." />
-            ) : (
-              // Display the Map when loading is complete
-              <Map userLocation={userLocation} drivers={drivers} />
-            )
-          ) : null}
+            {/* route to map page */}
+            <CustomButton
+              onPress={() => setShowMap(!showMap)}
+              title={showMap ? "Hide Map" : "Show drivers on map"}
+              bgVariant="secondary"
+              className="mt-2"
+            />
+
+            {/* Map Section */}
+            {showMap ? (
+              loading ? (
+                // Display loading spinner if still loading
+                <LoadingSpinner indicatorMessage="Loading drivers..." />
+              ) : (
+                // Display the Map when loading is complete
+                <Map userLocation={userLocation} drivers={drivers} />
+              )
+            ) : null}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
-    // </ProtectedRoute>
   );
 }
