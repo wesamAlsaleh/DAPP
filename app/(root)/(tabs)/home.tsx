@@ -39,6 +39,7 @@ const { width, height } = Dimensions.get("window");
 export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
+
   // Drivers state
   const [drivers, setDrivers] = useState<User[]>([]);
 
@@ -128,8 +129,11 @@ export default function home() {
       }
     };
 
-    fetchDrivers();
-    startTracking();
+    // Do the following only when the user is logged in
+    if (user != null) {
+      fetchDrivers();
+      startTracking();
+    }
   }, []); // Add an empty dependency array to run it once when the component mounts
 
   return (
@@ -186,17 +190,3 @@ export default function home() {
     // </ProtectedRoute>
   );
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f8f8f8", // Optional: A light background for visibility
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#606060", // Adjust to your preferred color
-  },
-});

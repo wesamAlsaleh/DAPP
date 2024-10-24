@@ -1,5 +1,3 @@
-// TODO: add layout here for navigate through tabs (home, profile, etc)
-
 import { Tabs } from "expo-router";
 
 // custom components
@@ -73,13 +71,3 @@ export default function layout() {
     </Tabs>
   );
 }
-
-/**
- * NOTEs: This layout sets up the bottom tab navigation for your app
- *  - Creates a tab navigator
- *  - Sets the initial route to "index"
- *  - Configures the tab bar appearance
- *  - The root layout (app/_layout.tsx) wraps everything and handles authentication.
- *  - Inside that, you have separate layouts for authentication ((auth)) and the main app content ((root)).
- *  - Within the main app content, you have a tabs layout that creates the bottom tab navigation.
- */
