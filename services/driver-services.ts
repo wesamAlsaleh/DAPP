@@ -11,6 +11,12 @@ export const getDrivers = async () => {
   return response.data;
 };
 
+// TODO: Get the available/busy drivers only to use them on the map (send them through the home component)
+export const getOnlineDrivers = async () => {
+  const response = await axios.get(`${API_BASE_URL}/online-drivers`);
+  return response.data;
+};
+
 //TODO: fix this Update driver's location API call
 export const updateDriverLocation = async ({
   latitude,
@@ -37,7 +43,7 @@ export const updateDriverLocation = async ({
       }
     );
   } catch (error) {
-    console.error("Error updating driver location", error);
+    console.error(" * Error updating driver location", error);
     throw error;
   }
 };

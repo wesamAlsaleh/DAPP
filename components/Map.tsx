@@ -18,7 +18,7 @@ interface MapProps {
 }
 
 export default function Map({ userLocation, drivers }: MapProps) {
-  // initial region
+  // initial region on Bahrain
   const initialRegion = userLocation
     ? {
         latitude: userLocation.latitude,
@@ -27,11 +27,13 @@ export default function Map({ userLocation, drivers }: MapProps) {
         longitudeDelta: 0.0421,
       }
     : {
-        latitude: 37.78825, // Default latitude
-        longitude: -122.4324, // Default longitude
+        latitude: 26.0667, // Default latitude for Bahrain
+        longitude: 50.5577, // Default longitude for Bahrain
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       };
+
+  // console.log(drivers);
 
   return (
     <View className="mt-4 rounded-xl overflow-hidden shadow-lg">
@@ -67,9 +69,7 @@ export default function Map({ userLocation, drivers }: MapProps) {
               }}
               image={icons.marker}
               title={driver.name}
-              description={`Driver's current location: ${latitude.toFixed(
-                2
-              )}, ${longitude.toFixed(2)}`}
+              description={`Driver's current Status: ${driver.status}`}
             />
           );
         })}

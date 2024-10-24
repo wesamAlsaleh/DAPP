@@ -32,6 +32,7 @@ import computer_email from "@/assets/icons/computer-email.png";
 import calendar from "@/assets/icons/calendar.png";
 import available from "@/assets/icons/available.png";
 import status from "@/assets/icons/status.png";
+import mapIcon from "@/assets/icons/mapIcon.png";
 
 // Import the images
 // import check from "@/assets/images/check.png";
@@ -84,4 +85,5 @@ export const icons = {
   computer_email,
   available,
   status,
+  mapIcon,
 };
