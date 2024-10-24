@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   Dimensions,
   StyleSheet,
   Text,
@@ -21,14 +23,114 @@ import { useAuth } from "@/contexts/AuthContext";
 import CustomButton from "@/components/CustomButton";
 import Map from "@/components/Map";
 
+// import location stuff
+import * as Location from "expo-location";
+
+// import driver functions
+import { getDrivers, updateDriverLocation } from "@/services/driver-services";
+
+// import User interface
+import { User } from "@/types/user";
+import LoadingSpinner from "@/components/LoadingSpinner";
+
 // import the Dimensions API to get the window dimensions
 const { width, height } = Dimensions.get("window");
 
 export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
+  // Drivers state
+  const [drivers, setDrivers] = useState<User[]>([]);
 
+  // Map state
   const [showMap, setShowMap] = useState(false);
+
+  // Error state
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // Loading state
+  const [loading, setLoading] = useState(true);
+
+  // User location state
+  const [userLocation, setUserLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+
+  console.log(userLocation);
+
+  // Request permission to access location
+  const requestLocationPermission = async () => {
+    try {
+      // request the location
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      // if the location is not granted set a message
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error requesting location permission", error);
+      return false;
+    }
+  };
+
+  // Fetch the driver's current location and send to backend
+  const fetchAndSendDriverLocation = async () => {
+    try {
+      // get the granter location
+      const location = await Location.getCurrentPositionAsync({});
+
+      // Get the longitude & latitude from the granted location
+      const { latitude, longitude } = location.coords;
+
+      // Set the user location
+      setUserLocation({ latitude, longitude });
+
+      // Send the location to the database
+      await updateDriverLocation({ latitude, longitude });
+    } catch (error) {}
+  };
+
+  // Fetch drivers from the API
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      try {
+        const driversFromDB = await getDrivers();
+
+        setDrivers(driversFromDB);
+      } catch (error) {
+        console.error("Error fetching drivers", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const startTracking = async () => {
+      // check if the user has the permission
+      const hasPermission = await requestLocationPermission();
+
+      // if true fetch the user
+      if (hasPermission) {
+        // Fetch location initially
+        fetchAndSendDriverLocation();
+
+        // Fetch location every 1 minute
+        const locationInterval = setInterval(() => {
+          fetchAndSendDriverLocation();
+        }, 60000); // 60,000 milliseconds = 1 minute
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(locationInterval);
+      }
+    };
+
+    fetchDrivers();
+    startTracking();
+  }, []); // Add an empty dependency array to run it once when the component mounts
 
   return (
     // <ProtectedRoute>
@@ -62,7 +164,15 @@ export default function home() {
           />
 
           {/* Map Section */}
-          {showMap && <Map />}
+          {showMap ? (
+            loading ? (
+              // Display loading spinner if still loading
+              <LoadingSpinner indicatorMessage="Loading drivers..." />
+            ) : (
+              // Display the Map when loading is complete
+              <Map userLocation={userLocation} drivers={drivers} />
+            )
+          ) : null}
 
           {/* Testing container  */}
           <View className="mt-4 ">
@@ -76,3 +186,17 @@ export default function home() {
     // </ProtectedRoute>
   );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f8f8f8", // Optional: A light background for visibility
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#606060", // Adjust to your preferred color
+  },
+});
