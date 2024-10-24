@@ -11,7 +11,7 @@ export const getDrivers = async () => {
   return response.data;
 };
 
-// Update driver's location API call
+//TODO: fix this Update driver's location API call
 export const updateDriverLocation = async ({
   latitude,
   longitude,
@@ -19,15 +19,11 @@ export const updateDriverLocation = async ({
   latitude: number;
   longitude: number;
 }) => {
-  // get the user
-  const { user } = useAuth();
-
   try {
-    const userToken = getToken();
+    // get the user token from the secure store
+    const userToken = await getToken();
 
-    console.log(userToken);
-
-    const response = await axios.post(
+    await axios.post(
       `${API_BASE_URL}/user/location`,
       {
         latitude,
@@ -40,7 +36,6 @@ export const updateDriverLocation = async ({
         },
       }
     );
-    return response.data;
   } catch (error) {
     console.error("Error updating driver location", error);
     throw error;
