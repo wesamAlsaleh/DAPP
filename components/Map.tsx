@@ -44,17 +44,32 @@ export default function Map({ userLocation, drivers }: MapProps) {
         showsUserLocation={true} // Enable the display of the user's current location on the map
         showsMyLocationButton={true} // Show a button to recenter the map to the user's location
       >
-        {/* {drivers.map((driver) => (
-          <Marker
-            key={driver.id}
-            coordinate={{
-              latitude: driver.latitude!,
-              longitude: driver.longitude!,
-            }}
-            image={icons.marker}
-            title={driver.name}
-          />
-        ))} */}
+        {drivers.map((driver) => {
+          // Convert latitude and longitude to numbers
+          const latitude = Number(driver.latitude);
+          const longitude = Number(driver.longitude);
+
+          // Validate that they are numbers
+          const isValidCoordinates = !isNaN(latitude) && !isNaN(longitude);
+
+          // Only render the marker if the coordinates are valid
+          if (!isValidCoordinates) {
+            console.warn(`Invalid coordinates for driver ${driver.id}`);
+            return null;
+          }
+
+          return (
+            <Marker
+              key={driver.id}
+              coordinate={{
+                latitude,
+                longitude,
+              }}
+              image={icons.marker}
+              title={driver.name}
+            />
+          );
+        })}
       </MapView>
     </View>
   );

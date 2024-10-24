@@ -57,7 +57,7 @@ export default function home() {
     longitude: number;
   } | null>(null);
 
-  console.log(userLocation);
+  // console.log(userLocation);
 
   // Request permission to access location
   const requestLocationPermission = async () => {
