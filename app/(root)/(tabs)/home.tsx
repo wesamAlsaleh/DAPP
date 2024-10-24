@@ -32,6 +32,7 @@ import { getDrivers, updateDriverLocation } from "@/services/driver-services";
 // import User interface
 import { User } from "@/types/user";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import DriversCountWidget from "@/components/widgets/drivers-count-widget";
 
 // import the Dimensions API to get the window dimensions
 const { width, height } = Dimensions.get("window");
@@ -153,9 +154,7 @@ export default function home() {
           {/* Admin feater */}
           {user?.role === "admin" ? (
             <>
-              <View className="bg-green-200 rounded-lg shadow-md mt-4">
-                <Text className="text-xl text-center">This is Admin user</Text>
-              </View>
+              <DriversCountWidget driversCount={drivers.length} />
             </>
           ) : null}
 
