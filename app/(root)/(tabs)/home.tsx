@@ -33,6 +33,7 @@ import { getDrivers, updateDriverLocation } from "@/services/driver-services";
 import { User } from "@/types/user";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import DriversCountWidget from "@/components/widgets/drivers-count-widget";
+import AfterMapInfo from "@/components/AfterMapInfo";
 
 // import the Dimensions API to get the window dimensions
 const { width, height } = Dimensions.get("window");
@@ -176,13 +177,6 @@ export default function home() {
               <Map userLocation={userLocation} drivers={drivers} />
             )
           ) : null}
-
-          {/* Testing container  */}
-          <View className="mt-4 ">
-            <View className="flex items-center justify-center bg-yellow-400 rounded-lg h-[100px]">
-              <Text className="text-center  text-lg  ">After the map</Text>
-            </View>
-          </View>
         </View>
       </View>
     </SafeAreaView>
