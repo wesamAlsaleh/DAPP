@@ -8,9 +8,9 @@ export default function LoadingSpinner({
 }) {
   return (
     // indicator Wrapper
-    <View className="flex-1 justify-center items-center">
+    <View className="justify-center items-center">
       {/* indicator */}
-      <ActivityIndicator size="large" color="#0000ff" />
+      <ActivityIndicator size="large" color="#101082A3" />
 
       {/* indicator Text */}
       <Text className="text-lg mt-12">{indicatorMessage}</Text>

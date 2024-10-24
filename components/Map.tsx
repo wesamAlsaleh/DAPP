@@ -34,12 +34,12 @@ export default function Map({ userLocation, drivers }: MapProps) {
       };
 
   return (
-    <View className="my-4 ">
+    <View className="mt-4 rounded-xl overflow-hidden shadow-lg">
       <MapView
         provider={PROVIDER_DEFAULT} // Use the default map provider (e.g., Google Maps if set up properly)
         showsCompass={true} // Display a compass on the map
-        className="w-full h-full rounded-2xl"
-        // showsPointsOfInterest={false} // Disable points of interest (like restaurants, landmarks)
+        className="w-full h-[600px]" // map style
+        showsPointsOfInterest={false} // Disable points of interest (like restaurants, landmarks)
         initialRegion={initialRegion}
         showsUserLocation={true} // Enable the display of the user's current location on the map
         showsMyLocationButton={true} // Show a button to recenter the map to the user's location
@@ -67,6 +67,9 @@ export default function Map({ userLocation, drivers }: MapProps) {
               }}
               image={icons.marker}
               title={driver.name}
+              description={`Driver's current location: ${latitude.toFixed(
+                2
+              )}, ${longitude.toFixed(2)}`}
             />
           );
         })}
