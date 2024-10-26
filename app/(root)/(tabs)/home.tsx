@@ -147,36 +147,35 @@ export default function home() {
           </Text>
         </View>
 
-        {/* main section  */}
-        <View>
-          {/* Admin Widgets */}
-          {user?.role === "admin" ? (
-            <>
-              <DriversCountWidget driversCount={drivers.length} />
-            </>
-          ) : null}
+        {/* Admin Dashboard */}
+        {user?.role === "admin" ? (
+          <>
+            <DriversCountWidget driversCount={drivers.length} />
 
-          {/* route to map page */}
-          <CustomButton
-            onPress={() => setShowMap(!showMap)}
-            title={showMap ? "Hide Map" : "Show drivers on map"}
-            bgVariant="secondary"
-            className="mt-4"
-          />
+            {/* Map Section */}
+            <View>
+              {/* route to map page */}
+              <CustomButton
+                onPress={() => setShowMap(!showMap)}
+                title={showMap ? "Hide Map" : "Show drivers on map"}
+                bgVariant="secondary"
+                className="mt-4"
+              />
 
-          {/* Map Section */}
-          {showMap ? (
-            loading ? (
-              // Display loading spinner if still loading
-              <LoadingSpinner indicatorMessage="Loading drivers..." />
-            ) : (
-              // Display the Map when loading is complete
-              <Map userLocation={userLocation} drivers={drivers} />
-            )
-          ) : null}
-        </View>
+              {showMap ? (
+                loading ? (
+                  // Display loading spinner if still loading
+                  <LoadingSpinner indicatorMessage="Loading drivers..." />
+                ) : (
+                  // Display the Map when loading is complete
+                  <Map userLocation={userLocation} drivers={drivers} />
+                )
+              ) : null}
+            </View>
+          </>
+        ) : null}
 
-        {/* sub main section */}
+        {/* Admin & driver main section */}
         <View>
           {/* Status Bar widget */}
           <StatusWidget />
