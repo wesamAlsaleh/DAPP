@@ -175,11 +175,13 @@ export default function home() {
           </>
         ) : null}
 
-        {/* Admin & driver main section */}
-        <View>
-          {/* Status Bar widget */}
-          <StatusWidget />
-        </View>
+        {/* Driver Dashboard */}
+        {user?.role === "driver" ? (
+          <View>
+            {/* Status Bar widget */}
+            <StatusWidget />
+          </View>
+        ) : null}
 
         {/* footer section */}
         <View></View>
