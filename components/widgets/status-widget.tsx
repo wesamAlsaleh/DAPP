@@ -7,9 +7,6 @@ import axios from "axios";
 // import getToken to get the user token to send the request
 import { getToken } from "@/services/token-service";
 
-// import User interface
-import { User } from "@/types/user";
-
 // import the auth context
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -48,7 +45,7 @@ export default function StatusWidget() {
     const userToken = await getToken();
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${appURL}/user/change-status`,
         {
           status: newStatus,
