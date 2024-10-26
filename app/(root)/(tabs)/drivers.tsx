@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  RefreshControl,
   Text,
   TouchableOpacity,
   View,
@@ -32,28 +33,39 @@ export default function drivers() {
   // loading state
   const [loading, setLoading] = useState(true);
 
-  // fetch drivers from the API
-  useEffect(() => {
-    const fetchDrivers = async () => {
-      try {
-        const driversFromDB = await getDrivers();
-
-        setDrivers(await driversFromDB);
-      } catch (error) {
-        console.error("Error fetching drivers", error);
-      } finally {
-        setLoading(false); // This runs regardless of success or error
-      }
-    };
-
-    fetchDrivers();
-  }, []);
-
   // query state to store the search query value
   const [searchQuery, setSearchQuery] = useState("");
 
   // drivers state
   const [drivers, setDrivers] = useState<User[]>([]);
+
+  // Refresh state
+  const [refreshing, setRefreshing] = useState(false);
+
+  // fetch drivers from the API
+  const fetchDrivers = async () => {
+    try {
+      const driversFromDB = await getDrivers();
+
+      setDrivers(await driversFromDB);
+    } catch (error) {
+      console.error("Error fetching drivers", error);
+    } finally {
+      setLoading(false); // This runs regardless of success or error
+    }
+  };
+
+  // Fetch the drivers when the component mounted
+  useEffect(() => {
+    fetchDrivers();
+  }, []);
+
+  // Refresh function to be called on pull-to-refresh
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchDrivers(); // re-fetch drivers
+    setRefreshing(false);
+  };
 
   // filter drivers based on the search query state value
   const filteredDrivers = drivers.filter(
@@ -165,6 +177,9 @@ export default function drivers() {
                 </Text>
               }
               ListFooterComponent={<View style={{ height: 120 }} />} // add an explicit spacer to push the last item above the bottom bar (solution for the bottom bar covering the last item)
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           )}
         </View>
