@@ -25,6 +25,7 @@ import CustomButton from "@/components/CustomButton";
 import Map from "@/components/Map";
 import StatusWidget from "@/components/widgets/status-widget";
 import DriversCountWidget from "@/components/widgets/drivers-count-widget";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 // import location stuff
 import * as Location from "expo-location";
@@ -34,10 +35,6 @@ import { getDrivers, updateDriverLocation } from "@/services/driver-services";
 
 // import User interface
 import { User } from "@/types/user";
-import LoadingSpinner from "@/components/LoadingSpinner";
-
-// import the Dimensions API to get the window dimensions
-const { width, height } = Dimensions.get("window");
 
 export default function home() {
   // get the user data from the AuthContext

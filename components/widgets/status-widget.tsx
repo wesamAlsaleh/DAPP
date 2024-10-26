@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 
 // import axios
 import axios from "axios";
+
+// import getToken to get the user token to send the request
 import { getToken } from "@/services/token-service";
+
+// import User interface
+import { User } from "@/types/user";
+
+// import the auth context
+import { useAuth } from "@/contexts/AuthContext";
 
 const appURL = process.env.EXPO_PUBLIC_URL;
 
 export default function StatusWidget() {
+  // get the user data from the AuthContext
+  const { user } = useAuth();
+
   // Status state
   const [status, setStatus] = useState("available");
 
@@ -21,16 +32,22 @@ export default function StatusWidget() {
     { label: "offline", color: "bg-gray-500" },
   ];
 
-  // Function to handle status change
+  // Set initial status based on user context data
+  useEffect(() => {
+    if (user?.status) {
+      setStatus(user.status);
+    }
+  }, [user?.status]);
+
+  // Function to handle status change request
   const changeStatus = async (newStatus: any) => {
     setStatus(newStatus);
-    setLoading(true);
+    setLoading(true); // set the loading state
 
     // get the user token from the secure store
     const userToken = await getToken();
 
     try {
-      // TODO: add my URL
       const response = await axios.post(
         `${appURL}/user/change-status`,
         {
@@ -43,9 +60,8 @@ export default function StatusWidget() {
           },
         }
       );
-      console.log("Status updated successfully", response.data);
     } catch (error) {
-      console.error("Error updating status", error);
+      console.error("* Error updating status", error);
     } finally {
       setLoading(false);
     }
