@@ -12,7 +12,7 @@ export default function DriversCountWidget({
 }) {
   return (
     // Widget container
-    <View className="mt-6 rounded-2xl overflow-hidden bg-white shadow-md">
+    <View className="mt-6 rounded-lg overflow-hidden bg-white shadow-md">
       <LinearGradient
         colors={["#1b5e20", "#2e7d32"]}
         start={{ x: 0, y: 0 }}

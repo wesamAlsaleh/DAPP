@@ -167,7 +167,7 @@ export default function home() {
               onPress={() => setShowMap(!showMap)}
               title={showMap ? "Hide Map" : "Show drivers on map"}
               bgVariant="secondary"
-              className="mt-2"
+              className="mt-4"
             />
 
             {/* Map Section */}
