@@ -7,7 +7,6 @@ import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 // import the constants
 import { icons } from "@/constants";
 import { User } from "@/types/user";
-import { getDrivers } from "@/services/driver-services";
 
 interface MapProps {
   userLocation: {

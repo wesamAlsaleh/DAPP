@@ -97,12 +97,11 @@ export default function home() {
     } catch (error) {}
   };
 
-  // Fetch drivers from the API
   useEffect(() => {
+    // Fetch Drivers Function
     const fetchDrivers = async () => {
       try {
         const driversFromDB = await getDrivers();
-
         setDrivers(driversFromDB);
       } catch (error) {
         console.error("Error fetching drivers", error);
@@ -111,31 +110,30 @@ export default function home() {
       }
     };
 
+    // Tracking functions
     const startTracking = async () => {
-      // check if the user has the permission
+      // checks for location permissions
       const hasPermission = await requestLocationPermission();
 
-      // if true fetch the user
+      // if he have the permission get the driver location
       if (hasPermission) {
-        // Fetch location initially
         fetchAndSendDriverLocation();
 
-        // Fetch location every 1 minute
+        // Sends the driver’s location to the server immediately after permission is granted
         const locationInterval = setInterval(() => {
           fetchAndSendDriverLocation();
-        }, 60000); // 60,000 milliseconds = 1 minute
+        }, 60000); // 1 minute interval
 
-        // Cleanup interval on component unmount
-        return () => clearInterval(locationInterval);
+        return () => clearInterval(locationInterval); // Cleanup interval on component unmount
       }
     };
 
-    // Do the following only when the user is logged in
-    if (user != null) {
-      fetchDrivers();
-      startTracking();
+    // if there is user
+    if (user) {
+      fetchDrivers(); // Fetch Drivers
+      startTracking(); // Start tracking
     }
-  }, []); // Add an empty dependency array to run it once when the component mounts
+  }, [user]); // Ensure this runs only on initial mount with a dependency on 'user', for example, if a user logs in or logs out
 
   return (
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
@@ -154,23 +152,13 @@ export default function home() {
 
             {/* Map Section */}
             <View>
-              {/* route to map page */}
-              <CustomButton
-                onPress={() => setShowMap(!showMap)}
-                title={showMap ? "Hide Map" : "Show drivers on map"}
-                bgVariant="secondary"
-                className="mt-4"
-              />
-
-              {showMap ? (
-                loading ? (
-                  // Display loading spinner if still loading
-                  <LoadingSpinner indicatorMessage="Loading drivers..." />
-                ) : (
-                  // Display the Map when loading is complete
-                  <Map userLocation={userLocation} drivers={drivers} />
-                )
-              ) : null}
+              {loading ? (
+                // Display loading spinner if still loading
+                <LoadingSpinner indicatorMessage="Loading drivers..." />
+              ) : (
+                // Display the Map when loading is complete
+                <Map userLocation={userLocation} drivers={drivers} />
+              )}
             </View>
           </>
         ) : null}
