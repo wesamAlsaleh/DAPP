@@ -131,7 +131,7 @@ export default function home() {
       fetchDrivers(); // Fetch Drivers
       startTracking(); // Start tracking
     }
-  }, [user]); // Ensure this runs only on initial mount with a dependency on 'user', for example, if a user logs in or logs out
+  }, []);
 
   return (
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
