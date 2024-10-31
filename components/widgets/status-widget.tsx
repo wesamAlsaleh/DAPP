@@ -98,12 +98,12 @@ export default function StatusWidget() {
         ))}
       </View>
 
-      <Text className="mt-4 text-base">
+      {/* <Text className="mt-4 text-base">
         Current status:{" "}
         <Text className="font-bold">
           {status.charAt(0).toUpperCase() + status.slice(1)}
         </Text>
-      </Text>
+      </Text> */}
     </View>
   );
 }
