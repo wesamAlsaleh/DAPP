@@ -7,7 +7,7 @@ import { getToken, setToken } from "./token-service";
 // import the User interface type from the types folder
 import { User } from "@/types/user";
 
-const API_BASE_URL = "http://dapp.bableto.site/api"; // Update this as needed
+const API_BASE_URL = process.env.EXPO_PUBLIC_URL;
 
 /**
  *  Registers a new user with the provided name, email and password.

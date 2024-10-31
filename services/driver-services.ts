@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import { getToken } from "./token-service";
 
-const API_BASE_URL = "http://dapp.bableto.site/api"; // Update this as needed
+const API_BASE_URL = process.env.EXPO_PUBLIC_URL;
 
 export const getDrivers = async () => {
   const response = await axios.get(`${API_BASE_URL}/drivers`);
