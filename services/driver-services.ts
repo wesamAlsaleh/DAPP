@@ -43,6 +43,6 @@ export const updateDriverLocation = async ({
       }
     );
   } catch (error) {
-    console.error(" * Error updating driver location", error);
+    console.error(" * Error updating driver location!", error);
   }
 };

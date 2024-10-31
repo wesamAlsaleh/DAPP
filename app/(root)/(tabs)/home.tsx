@@ -93,7 +93,10 @@ export default function home() {
       // Send the location to the database
       await updateDriverLocation({ latitude, longitude });
     } catch (error) {
-      console.error("Error updating/fetching driver location", error);
+      console.error(
+        "* Out of service, cant fetch and send driver location!",
+        error
+      );
     }
   };
 
