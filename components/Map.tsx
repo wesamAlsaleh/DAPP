@@ -16,21 +16,14 @@ interface MapProps {
   drivers: User[]; // Accept drivers as a prop
 }
 
-export default function Map({ userLocation, drivers }: MapProps) {
+export default function Map({ drivers }: MapProps) {
   // initial region on Bahrain
-  const initialRegion = userLocation
-    ? {
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }
-    : {
-        latitude: 26.0667, // Default latitude for Bahrain
-        longitude: 50.5577, // Default longitude for Bahrain
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      };
+  const initialRegion = {
+    latitude: 26.0667, // Default latitude for Bahrain
+    longitude: 50.5577, // Default longitude for Bahrain
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  };
 
   // console.log(drivers);
 
@@ -38,12 +31,9 @@ export default function Map({ userLocation, drivers }: MapProps) {
     <View className="mt-4 rounded-xl overflow-hidden shadow-lg">
       <MapView
         provider={PROVIDER_DEFAULT} // Use the default map provider (e.g., Google Maps if set up properly)
-        showsCompass={true} // Display a compass on the map
         className="w-full h-[600px]" // map style
         showsPointsOfInterest={false} // Disable points of interest (like restaurants, landmarks)
         initialRegion={initialRegion}
-        showsUserLocation={true} // Enable the display of the user's current location on the map
-        showsMyLocationButton={true} // Show a button to recenter the map to the user's location
       >
         {drivers.map((driver) => {
           // Convert latitude and longitude to numbers
