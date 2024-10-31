@@ -14,8 +14,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import GlobalStyles from "@/scripts/GlobalStyles";
 
 // import custom components
-import CustomButton from "@/components/CustomButton";
 import CustomInputField from "@/components/CustomInputField";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 // import the ProtectedRoute component to protect the route from unauthorized access
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -156,14 +156,7 @@ export default function drivers() {
           {/* main section */}
           {/* if loading show spinner otherwise show the FlatList */}
           {loading ? (
-            <View className="flex-1 justify-center items-center">
-              <ActivityIndicator
-                size="large"
-                color="#0000ff"
-                className="flex items-center justify-center"
-              />
-              <Text className="mt-2 text-gray-600">Loading drivers...</Text>
-            </View>
+            <LoadingSpinner indicatorMessage="Loading drivers..." />
           ) : (
             <FlatList
               data={filteredDrivers}
