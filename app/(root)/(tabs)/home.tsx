@@ -35,6 +35,7 @@ import { getDrivers, updateDriverLocation } from "@/services/driver-services";
 
 // import User interface
 import { User } from "@/types/user";
+import UserMap from "@/components/UserMap";
 
 export default function home() {
   // get the user data from the AuthContext
@@ -42,9 +43,6 @@ export default function home() {
 
   // Drivers state
   const [drivers, setDrivers] = useState<User[]>([]);
-
-  // Map state
-  const [showMap, setShowMap] = useState(false);
 
   // Error state
   const [errorMsg, setErrorMsg] = useState("");
@@ -148,6 +146,7 @@ export default function home() {
         {/* Admin Dashboard */}
         {user?.role === "admin" ? (
           <>
+            {/* Admin widget */}
             <DriversCountWidget driversCount={drivers.length} />
 
             {/* Map Section */}
@@ -168,6 +167,15 @@ export default function home() {
           <View>
             {/* Status Bar widget */}
             <StatusWidget />
+
+            <Text className="mt-4 font-bold text-2xl">
+              You're on the move! 🚗
+            </Text>
+            <Text className="text-lg text-gray-600 mt-2">
+              Here's where you are right now:
+            </Text>
+
+            <UserMap drivers={drivers} userLocation={userLocation} />
           </View>
         ) : null}
 

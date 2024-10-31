@@ -67,7 +67,7 @@ export default function StatusWidget() {
   return (
     // widget container
     <View className="bg-white rounded-lg shadow-md mt-4 p-6">
-      <Text className="text-lg font-bold mb-4">Set your status:</Text>
+      <Text className="text-xl font-bold mb-4">Set your status:</Text>
 
       {/* Status bar container */}
       <View className="flex-row items-center bg-gray-200 rounded-lg overflow-hidden">
