@@ -1,18 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-// import the ProtectedRoute component to protect the route from unauthorized access
-import ProtectedRoute from "@/components/ProtectedRoute";
 
 // import the GlobalStyles script to use the global styles
 import GlobalStyles from "@/scripts/GlobalStyles";
@@ -21,21 +9,28 @@ import GlobalStyles from "@/scripts/GlobalStyles";
 import { useAuth } from "@/contexts/AuthContext";
 
 // import the Custom components
-import CustomButton from "@/components/CustomButton";
 import Map from "@/components/Map";
+import UserMap from "@/components/UserMap";
 import StatusWidget from "@/components/widgets/status-widget";
 import DriversCountWidget from "@/components/widgets/drivers-count-widget";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 // import location stuff
-import * as Location from "expo-location";
+import * as Location from "expo-location"; // For accessing location services
+
+import { LocationObject } from "expo-location";
+
+// import TaskManager from expo to manage background tasks
+import * as TaskManager from "expo-task-manager"; // For managing background tasks
 
 // import driver functions
 import { getDrivers, updateDriverLocation } from "@/services/driver-services";
 
 // import User interface
 import { User } from "@/types/user";
-import UserMap from "@/components/UserMap";
+
+// Define the name of the background location task for TaskManager
+const LOCATION_TASK_NAME = "background-location-task";
 
 export default function home() {
   // get the user data from the AuthContext
@@ -56,70 +51,47 @@ export default function home() {
     longitude: number;
   } | null>(null);
 
-  // Log the user location
-  // console.log(userLocation);
-
-  /**
-   * Requests permission to access the device's location.
-   *
-   * @returns {Promise<boolean>} A promise that resolves to `true` if the permission was granted,
-   *                             or `false` if there was an error or the permission was denied.
-   *
-   * @throws {Error} If there is an error requesting location permission.
-   */
-  const requestLocationPermission = async () => {
-    try {
-      // Request permission to access location
-      let { status } = await Location.requestForegroundPermissionsAsync();
-
-      // Check if permission was granted or not
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+  // Define the background location task for TaskManager to execute
+  TaskManager.defineTask(
+    LOCATION_TASK_NAME,
+    async ({
+      data,
+      error,
+    }: TaskManager.TaskManagerTaskBody<{ locations: LocationObject[] }>) => {
+      // Log the error if there is one
+      if (error) {
+        console.error("Background location task error:", error);
         return;
       }
 
-      return true;
-    } catch (error) {
-      console.error("* Error requesting location permission", error);
-      return false;
+      // Extract user locations from data
+      const { locations } = data;
+
+      // Process the locations array
+      locations.forEach(async (location) => {
+        // Extract the user latitude and longitude from the location object
+        const { latitude, longitude } = location.coords;
+
+        // Update the user location state with the retrieved latitude and longitude
+        setUserLocation({ latitude, longitude });
+
+        // Send the updated location to the database
+        await updateDriverLocation({ latitude, longitude });
+
+        // console.log("Received location:", location);
+      });
     }
-  };
-
-  /**
-   * Fetches the current location of the driver and sends it to the database.
-   *
-   * This function performs the following steps:
-   * 1. Retrieves the current position of the device using `Location.getCurrentPositionAsync`.
-   * 2. Extracts the latitude and longitude from the retrieved location.
-   * 3. Updates the user location state with the retrieved latitude and longitude.
-   * 4. Sends the updated location to the database using `updateDriverLocation`.
-   *
-   * If an error occurs during any of these steps, it logs an error message to the console.
-   *
-   * @returns {Promise<void>} A promise that resolves when the location has been successfully fetched and sent.
-   */
-  const fetchAndSendDriverLocation = async () => {
-    try {
-      // Get the current position of the device
-      const location = await Location.getCurrentPositionAsync({});
-
-      // Extract the latitude and longitude from the location
-      const { latitude, longitude } = location.coords;
-
-      // Update the user location state with the retrieved latitude and longitude
-      setUserLocation({ latitude, longitude });
-
-      // Send the updated location to the database
-      await updateDriverLocation({ latitude, longitude });
-    } catch (error) {
-      console.error(
-        "* Out of service, cant fetch and send driver location!",
-        error
-      );
-    }
-  };
+  );
 
   useEffect(() => {
+    /**
+     * Fetches drivers from the database and updates the drivers state.
+     *
+     * @async
+     * @function fetchDrivers
+     * @returns {Promise<void>} A promise that resolves when the drivers have been fetched and the state has been updated.
+     * @throws Will log an error message if there is an issue fetching the drivers.
+     */
     const fetchDrivers = async () => {
       try {
         // Fetch drivers from the database
@@ -135,12 +107,39 @@ export default function home() {
     };
 
     /**
-     * Starts tracking the driver's location.
+     * Requests permission to access the device's location.
      *
-     * This function checks for location permissions and, if granted, fetches and sends the driver's location
-     * to the server immediately. It continues to send the driver's location at 1-minute intervals.
+     * @returns {Promise<boolean>} A promise that resolves to `true` if the permission was granted,
+     *                             or `false` if there was an error or the permission was denied.
      *
-     * @returns {Promise<() => void>} A cleanup function to clear the interval on component unmount.
+     * @throws {Error} If there is an error requesting location permission.
+     */
+    const requestLocationPermission = async () => {
+      try {
+        // Request permission to access location
+        let { status } = await Location.requestForegroundPermissionsAsync();
+
+        // Check if permission was granted or not
+        if (status !== "granted") {
+          setErrorMsg("Permission to access location was denied");
+          return;
+        }
+
+        return true;
+      } catch (error) {
+        console.error("* Error requesting location permission", error);
+        return false;
+      }
+    };
+
+    /**
+     * Starts tracking the user's location in the background.
+     *
+     * This function first checks for location permissions. If the permission is granted,
+     * it starts location tracking with high accuracy, updating the location every second
+     * and every meter moved.
+     *
+     * @returns {Promise<void>} A promise that resolves when the location tracking has started.
      */
     const startTracking = async () => {
       // checks for location permissions
@@ -148,23 +147,25 @@ export default function home() {
 
       // if he have the permission get the driver location
       if (hasPermission) {
-        fetchAndSendDriverLocation();
-
-        // Sends the driver’s location to the server immediately after permission is granted
-        const locationInterval = setInterval(() => {
-          fetchAndSendDriverLocation();
-        }, 60000); // 1 minute interval
-
-        return () => clearInterval(locationInterval); // Cleanup interval on component unmount
+        // Start the location tracking in the background
+        await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+          accuracy: Location.Accuracy.High, // high accuracy for location updates (GPS)
+          distanceInterval: 1, // meters
+          deferredUpdatesInterval: 1000, // milliseconds (1 second)
+        });
       }
     };
 
+    // If the user is logged in, fetch drivers
+    if (user?.role === "admin") {
+      fetchDrivers(); // Fetch Drivers
+    }
+
     // Check if user is logged in and start tracking
     if (user) {
-      fetchDrivers(); // Fetch Drivers
       startTracking(); // Start tracking
     }
-  }, []);
+  }, [user]); // Run this effect when the user changes (login/logout)
 
   return (
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
@@ -189,7 +190,7 @@ export default function home() {
                 <LoadingSpinner indicatorMessage="Loading drivers..." />
               ) : (
                 // Display the Map when loading is done
-                // TODO: update the drivers with the MapDriversAPI!
+                // TODO: Only add the available/busy drivers to the map
                 <Map userLocation={userLocation} drivers={drivers} />
               )}
             </View>
