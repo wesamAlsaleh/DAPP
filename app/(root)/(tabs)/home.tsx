@@ -239,14 +239,7 @@ export default function home() {
         ) : null}
 
         {/* footer section */}
-        <View>
-          <TouchableOpacity
-            className="bg-red-500 mt-4 p-2 rounded-lg items-center justify-center"
-            onPress={() => setErrorMsg("pressed")}
-          >
-            <Text>Set error message for testing</Text>
-          </TouchableOpacity>
-        </View>
+        <View></View>
       </ScrollView>
     </SafeAreaView>
   );
