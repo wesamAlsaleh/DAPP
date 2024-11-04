@@ -153,16 +153,16 @@ export default function home() {
           await Location.requestBackgroundPermissionsAsync();
 
         // Check if background location permissions were granted
-        if (backgroundStatus !== "granted") {
-          setErrorMsg("Background location permission was denied");
-          return;
-        } else {
+        if (backgroundStatus === "granted") {
           await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
             // Start location updates in the background with high accuracy
             accuracy: Location.Accuracy.High, // Use high accuracy for location updates (GPS)
             distanceInterval: 1, // Update location every meter
             deferredUpdatesInterval: 1000, // Update location every second
           });
+        } else {
+          setErrorMsg("Background location permission was denied");
+          return;
         }
       }
     };
