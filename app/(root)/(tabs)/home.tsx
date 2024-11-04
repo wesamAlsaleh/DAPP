@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // import the GlobalStyles script to use the global styles
@@ -39,7 +39,7 @@ export default function home() {
   // Drivers state
   const [drivers, setDrivers] = useState<User[]>([]);
 
-  //TODO: Error state
+  // Error state
   const [errorMsg, setErrorMsg] = useState("");
 
   // Loading state
@@ -143,6 +143,12 @@ export default function home() {
      * @returns {Promise<void>} A promise that resolves when the location tracking has started.
      */
     const startTracking = async () => {
+      /**
+       * Clear any previous error messages
+       * Each time you attempt to start tracking the user's location, any previous error message is cleared first.
+       */
+      setErrorMsg("");
+
       // checks for location permissions
       const hasPermission = await requestLocationPermission();
 
@@ -189,7 +195,9 @@ export default function home() {
 
           {/* if there is an error show it  */}
           {errorMsg === "" ? null : (
-            <Text className="text-red-500 text-sm mt-2">{errorMsg}</Text>
+            <Text className="text-red-500 text-sm mt-2 font-bold">
+              {errorMsg}
+            </Text>
           )}
         </View>
 
@@ -231,7 +239,14 @@ export default function home() {
         ) : null}
 
         {/* footer section */}
-        <View></View>
+        <View>
+          <TouchableOpacity
+            className="bg-red-500 mt-4 p-2 rounded-lg items-center justify-center"
+            onPress={() => setErrorMsg("pressed")}
+          >
+            <Text>Set error message for testing</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

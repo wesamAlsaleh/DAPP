@@ -9,6 +9,7 @@ import { getToken } from "@/services/token-service";
 
 // import the auth context
 import { useAuth } from "@/contexts/AuthContext";
+import LoadingSpinner from "../LoadingSpinner";
 
 const appURL = process.env.EXPO_PUBLIC_URL;
 
@@ -71,35 +72,36 @@ export default function StatusWidget() {
     // widget container
     <View className="bg-white rounded-lg shadow-md mt-4 p-6">
       <Text className="text-xl font-bold mb-4">Set your status:</Text>
-
-      {/* Status bar container */}
-      <View className="flex-row items-center bg-gray-200 rounded-lg overflow-hidden">
-        {statusOptions.map((option) => (
-          <TouchableOpacity
-            key={option.label}
-            onPress={() => changeStatus(option.label)}
-            className={`flex-1 p-3 items-center justify-center transition-colors duration-300 ${
-              status === option.label
-                ? `${option.color} text-white`
-                : "text-gray-700"
-            } `}
-            style={{
-              borderRadius: 10, // option button radius
-              margin: 1, // option button margin
-            }}
-            disabled={loading}
-          >
-            {/* Display status label */}
-            <Text
-              className={`text-base font-medium ${
-                status === option.label ? "text-white" : "text-gray-700"
-              }`}
+      {loading ? (
+        <LoadingSpinner indicatorMessage="Changing your status..." />
+      ) : (
+        <View className="flex-row items-center bg-gray-200 rounded-lg overflow-hidden">
+          {statusOptions.map((option) => (
+            <TouchableOpacity
+              key={option.label}
+              onPress={() => changeStatus(option.label)}
+              className={`flex-1 p-3 items-center justify-center transition-colors duration-300 ${
+                status === option.label
+                  ? `${option.color} text-white`
+                  : "text-gray-700"
+              } `}
+              style={{
+                borderRadius: 10, // option button radius
+                margin: 1, // option button margin
+              }}
             >
-              {option.label.charAt(0).toUpperCase() + option.label.slice(1)}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+              {/* Display status label */}
+              <Text
+                className={`text-base font-medium ${
+                  status === option.label ? "text-white" : "text-gray-700"
+                }`}
+              >
+                {option.label.charAt(0).toUpperCase() + option.label.slice(1)}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
 
       {/* <Text className="mt-4 text-base">
         Current status:{" "}
