@@ -80,7 +80,7 @@ export default function home() {
 
       return true;
     } catch (error) {
-      console.error("Error requesting location permission", error);
+      console.error("* Error requesting location permission", error);
       return false;
     }
   };
@@ -128,7 +128,7 @@ export default function home() {
         // Update the drivers state with the fetched drivers
         setDrivers(driversFromDB);
       } catch (error) {
-        console.error("Error fetching drivers", error);
+        console.error("* Error fetching drivers", error);
       } finally {
         setLoading(false); // Set loading to false after fetching drivers
       }

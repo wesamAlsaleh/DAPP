@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 // import linear design
 import { LinearGradient } from "expo-linear-gradient";
@@ -14,14 +14,14 @@ export default function DriversCountWidget({
     // Widget container
     <View className="mt-6 rounded-lg overflow-hidden bg-white shadow-md">
       <LinearGradient
-        colors={["#1b5e20", "#2e7d32"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
+        colors={["#1b5e20", "#2e7d32"]} // Gradient colors
+        start={{ x: 0, y: 0 }} // Gradient start point
+        end={{ x: 1, y: 0 }} // Gradient end point
         style={{
           padding: 24,
           borderBottomWidth: 1,
           borderBottomColor: "#1b5e20",
-        }}
+        }} // Add padding and border bottom color to the gradient container (green)
       >
         {/* ... container */}
         <View className="flex-row items-center justify-center">
@@ -31,7 +31,7 @@ export default function DriversCountWidget({
           </Text>
         </View>
 
-        <Text className="text-center text-gray-200 mt-2">
+        <Text className="text-center text-base text-gray-200 mt-2">
           You have special permissions to manage the system.
         </Text>
       </LinearGradient>
@@ -57,7 +57,7 @@ export default function DriversCountWidget({
           </View>
         </View>
 
-        <Text className="text-sm text-green-800 mt-2">
+        <Text className="text-base text-green-800 mt-2">
           Active drivers in the system
         </Text>
       </View>
