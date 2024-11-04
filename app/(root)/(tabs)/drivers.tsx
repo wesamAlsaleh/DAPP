@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   RefreshControl,
@@ -21,7 +20,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 // import the icons and images from the constants script
-import { icons, images } from "@/constants";
+import { icons } from "@/constants";
 
 // import the User type from the user script
 import { User } from "@/types/user";
