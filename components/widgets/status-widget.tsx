@@ -55,7 +55,7 @@ export default function StatusWidget() {
         },
         {
           headers: {
-            "Content-Type": "application/vnd.api+json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${userToken}`,
           },
         }

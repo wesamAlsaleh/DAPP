@@ -39,12 +39,12 @@ export const updateDriverLocation = async ({
       },
       {
         headers: {
-          "Content-Type": "application/vnd.api+json", // set the content type to JSON API
+          "Content-Type": "application/json", // set the content type to JSON API
           Authorization: `Bearer ${userToken}`, // pass the user token in the Authorization header
         },
       }
     );
   } catch (error) {
-    console.error(" * Error updating driver location!", error);
+    console.error(" * Error updating driver location (driver-service)", error);
   }
 };

@@ -23,7 +23,7 @@ export async function register(name: string, email: string, password: string) {
       },
       {
         headers: {
-          "Content-Type": "application/vnd.api+json",
+          "Content-Type": "application/json",
         },
       }
     ); // get the token from the response!
@@ -60,7 +60,7 @@ export async function login(email: string, password: string) {
       },
       {
         headers: {
-          "Content-Type": "application/vnd.api+json",
+          "Content-Type": "application/json",
         },
       }
     ); // get the token from the response!
