@@ -145,7 +145,8 @@ export default function home() {
     const startTracking = async () => {
       /**
        * Clear any previous error messages
-       * Each time you attempt to start tracking the user's location, any previous error message is cleared first.
+       * Each time you attempt to start tracking the user's location,
+       * any previous error message is cleared first.
        */
       setErrorMsg("");
 

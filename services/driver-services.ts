@@ -18,7 +18,7 @@ export const getOnlineDrivers = async () => {
   return response.data;
 };
 
-//TODO: fix this Update driver's location API call
+// update the driver location
 export const updateDriverLocation = async ({
   latitude,
   longitude,
@@ -27,11 +27,17 @@ export const updateDriverLocation = async ({
   longitude: number;
 }) => {
   try {
-    // get the user token
+    // Get the user token
     const userToken = await getToken();
 
-    // make the API call to update the driver's location using the user token
-    await axios.post(
+    // If there is no user token, log an error and return
+    if (!userToken) {
+      console.error("No user token found. Cannot update location.");
+      return;
+    }
+
+    // Make the API call to update the driver's location
+    const { data } = await axios.post(
       `${API_BASE_URL}/user/location`,
       {
         latitude,
@@ -44,7 +50,14 @@ export const updateDriverLocation = async ({
         },
       }
     );
+
+    // Log the response for debugging purposes
+    console.log("Location update response:", data.message);
   } catch (error) {
-    console.error(" * Error updating driver location (driver-service)", error);
+    console.error("Error updating driver location (driver-service)", {
+      error,
+      latitude,
+      longitude,
+    });
   }
 };
