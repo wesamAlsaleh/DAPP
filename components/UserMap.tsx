@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 
 // import map stuff
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
 
 // import the constants
-import { icons } from "@/constants";
 import { User } from "@/types/user";
 
 interface MapProps {
@@ -17,7 +16,7 @@ interface MapProps {
 }
 
 export default function UserMap({ userLocation, drivers }: MapProps) {
-  // initial region on Bahrain
+  // Set the initial region of the map to the user's location if available or to Bahrain
   const initialRegion = userLocation
     ? {
         latitude: userLocation.latitude,

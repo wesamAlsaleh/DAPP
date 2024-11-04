@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { View, Text, ScrollView, Image, Alert } from "react-native";
 import { Link, router } from "expo-router";
-// import ReactNativeModal from "react-native-modal";
-
-// import global styles to use the droidSafeArea style
-import GlobalStyles from "@/scripts/GlobalStyles";
 
 // import images/icons from constants
 import { icons, images } from "@/constants";
@@ -27,10 +23,10 @@ const SignUp = () => {
     password: "",
   });
 
-  // show success modal state
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  // TODO: show success modal state
+  const [showMessage, setShowMessage] = useState(false);
 
-  const { user, setUser } = useAuth();
+  const { setUser } = useAuth();
 
   // function to handle sign up
   const onSignUpPress = async () => {

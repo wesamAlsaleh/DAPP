@@ -44,7 +44,7 @@ export default function home() {
   // Drivers state
   const [drivers, setDrivers] = useState<User[]>([]);
 
-  // Error state
+  //TODO: Error state
   const [errorMsg, setErrorMsg] = useState("");
 
   // Loading state
@@ -59,13 +59,20 @@ export default function home() {
   // Log the user location
   // console.log(userLocation);
 
-  // Request permission to access location
+  /**
+   * Requests permission to access the device's location.
+   *
+   * @returns {Promise<boolean>} A promise that resolves to `true` if the permission was granted,
+   *                             or `false` if there was an error or the permission was denied.
+   *
+   * @throws {Error} If there is an error requesting location permission.
+   */
   const requestLocationPermission = async () => {
     try {
-      // request the location
+      // Request permission to access location
       let { status } = await Location.requestForegroundPermissionsAsync();
 
-      // if the location is not granted set a message
+      // Check if permission was granted or not
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
@@ -78,19 +85,31 @@ export default function home() {
     }
   };
 
-  // Fetch the driver's current location and send to backend
+  /**
+   * Fetches the current location of the driver and sends it to the database.
+   *
+   * This function performs the following steps:
+   * 1. Retrieves the current position of the device using `Location.getCurrentPositionAsync`.
+   * 2. Extracts the latitude and longitude from the retrieved location.
+   * 3. Updates the user location state with the retrieved latitude and longitude.
+   * 4. Sends the updated location to the database using `updateDriverLocation`.
+   *
+   * If an error occurs during any of these steps, it logs an error message to the console.
+   *
+   * @returns {Promise<void>} A promise that resolves when the location has been successfully fetched and sent.
+   */
   const fetchAndSendDriverLocation = async () => {
     try {
-      // get the granter location
+      // Get the current position of the device
       const location = await Location.getCurrentPositionAsync({});
 
-      // Get the longitude & latitude from the granted location
+      // Extract the latitude and longitude from the location
       const { latitude, longitude } = location.coords;
 
-      // Set the user location
+      // Update the user location state with the retrieved latitude and longitude
       setUserLocation({ latitude, longitude });
 
-      // Send the location to the database
+      // Send the updated location to the database
       await updateDriverLocation({ latitude, longitude });
     } catch (error) {
       console.error(
@@ -101,19 +120,28 @@ export default function home() {
   };
 
   useEffect(() => {
-    // Fetch Drivers Function
     const fetchDrivers = async () => {
       try {
+        // Fetch drivers from the database
         const driversFromDB = await getDrivers();
+
+        // Update the drivers state with the fetched drivers
         setDrivers(driversFromDB);
       } catch (error) {
         console.error("Error fetching drivers", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false after fetching drivers
       }
     };
 
-    // Tracking functions
+    /**
+     * Starts tracking the driver's location.
+     *
+     * This function checks for location permissions and, if granted, fetches and sends the driver's location
+     * to the server immediately. It continues to send the driver's location at 1-minute intervals.
+     *
+     * @returns {Promise<() => void>} A cleanup function to clear the interval on component unmount.
+     */
     const startTracking = async () => {
       // checks for location permissions
       const hasPermission = await requestLocationPermission();
@@ -131,7 +159,7 @@ export default function home() {
       }
     };
 
-    // if there is user
+    // Check if user is logged in and start tracking
     if (user) {
       fetchDrivers(); // Fetch Drivers
       startTracking(); // Start tracking
@@ -160,7 +188,8 @@ export default function home() {
                 // Display loading spinner if still loading
                 <LoadingSpinner indicatorMessage="Loading drivers..." />
               ) : (
-                // Display the Map when loading is complete
+                // Display the Map when loading is done
+                // TODO: update the drivers with the MapDriversAPI!
                 <Map userLocation={userLocation} drivers={drivers} />
               )}
             </View>

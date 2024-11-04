@@ -17,7 +17,7 @@ interface MapProps {
 }
 
 export default function Map({ drivers }: MapProps) {
-  // initial region on Bahrain
+  // Set the initial region for the map (Bahrain)
   const initialRegion = {
     latitude: 26.0667, // Default latitude for Bahrain
     longitude: 50.5577, // Default longitude for Bahrain

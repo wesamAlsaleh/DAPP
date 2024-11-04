@@ -42,11 +42,13 @@ export default function drivers() {
   // Refresh state
   const [refreshing, setRefreshing] = useState(false);
 
-  // fetch drivers from the API
+  // fetch drivers function to get the drivers from the database
   const fetchDrivers = async () => {
     try {
+      // get the drivers from the database
       const driversFromDB = await getDrivers();
 
+      // set the drivers state with the fetched drivers
       setDrivers(await driversFromDB);
     } catch (error) {
       console.error("Error fetching drivers", error);
@@ -67,7 +69,7 @@ export default function drivers() {
     setRefreshing(false);
   };
 
-  // filter drivers based on the search query state value
+  // filter the drivers based on the search query
   const filteredDrivers = drivers.filter(
     (driver) =>
       // check if the driver name or email includes the search query

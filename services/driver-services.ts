@@ -1,11 +1,12 @@
 import axios from "axios";
 
-// import the use auth to get the user
-import { useAuth } from "@/contexts/AuthContext";
+// import the use auth to get the user token
 import { getToken } from "./token-service";
 
+// get the API base URL from the environment variables
 const API_BASE_URL = process.env.EXPO_PUBLIC_URL;
 
+// get the drivers from the API
 export const getDrivers = async () => {
   const response = await axios.get(`${API_BASE_URL}/drivers`);
   return response.data;
@@ -26,9 +27,10 @@ export const updateDriverLocation = async ({
   longitude: number;
 }) => {
   try {
-    // get the user token from the secure store
+    // get the user token
     const userToken = await getToken();
 
+    // make the API call to update the driver's location using the user token
     await axios.post(
       `${API_BASE_URL}/user/location`,
       {
@@ -37,8 +39,8 @@ export const updateDriverLocation = async ({
       },
       {
         headers: {
-          "Content-Type": "application/vnd.api+json",
-          Authorization: `Bearer ${userToken}`,
+          "Content-Type": "application/vnd.api+json", // set the content type to JSON API
+          Authorization: `Bearer ${userToken}`, // pass the user token in the Authorization header
         },
       }
     );

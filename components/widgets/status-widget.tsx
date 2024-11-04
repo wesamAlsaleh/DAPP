@@ -29,17 +29,20 @@ export default function StatusWidget() {
     { label: "offline", color: "bg-gray-500" },
   ];
 
-  // Set initial status based on user context data
+  // Set initial status based on user data
   useEffect(() => {
     if (user?.status) {
       setStatus(user.status);
     }
   }, [user?.status]);
 
-  // Function to handle status change request
+  // Function to change the user status
   const changeStatus = async (newStatus: any) => {
+    // set the new status in the state
     setStatus(newStatus);
-    setLoading(true); // set the loading state
+
+    // set loading to true
+    setLoading(true);
 
     // get the user token from the secure store
     const userToken = await getToken();

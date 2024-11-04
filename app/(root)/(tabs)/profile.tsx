@@ -25,10 +25,10 @@ export default function profile() {
   // get the user data from the AuthContext
   const { user, setUser } = useAuth();
 
-  // handle the logout action
+  // handle the logout function
   const handleLogout = async () => {
     try {
-      // call the logout function to log out the user
+      // call the logout function from the auth-services
       await logout();
 
       // set the user to null to clear the user data
