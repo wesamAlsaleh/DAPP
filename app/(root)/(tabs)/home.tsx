@@ -83,6 +83,7 @@ export default function home() {
     }
   );
 
+  // useEffect hook to fetch drivers from the database and start location tracking
   useEffect(() => {
     /**
      * Fetches drivers from the database and updates the drivers state.
@@ -133,7 +134,7 @@ export default function home() {
     };
 
     /**
-     * Starts tracking the user's location in the background.
+     * Starts tracking the user's location in the background using the TaskManager.
      *
      * This function first checks for location permissions. If the permission is granted,
      * it starts location tracking with high accuracy, updating the location every second
@@ -147,12 +148,22 @@ export default function home() {
 
       // if he have the permission get the driver location
       if (hasPermission) {
-        // Start the location tracking in the background
-        await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-          accuracy: Location.Accuracy.High, // high accuracy for location updates (GPS)
-          distanceInterval: 1, // meters
-          deferredUpdatesInterval: 1000, // milliseconds (1 second)
-        });
+        // Request background location permissions
+        const { status: backgroundStatus } =
+          await Location.requestBackgroundPermissionsAsync();
+
+        // Check if background location permissions were granted
+        if (backgroundStatus !== "granted") {
+          setErrorMsg("Background location permission was denied");
+          return;
+        } else {
+          await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+            // Start location updates in the background with high accuracy
+            accuracy: Location.Accuracy.High, // Use high accuracy for location updates (GPS)
+            distanceInterval: 1, // Update location every meter
+            deferredUpdatesInterval: 1000, // Update location every second
+          });
+        }
       }
     };
 
@@ -175,6 +186,11 @@ export default function home() {
           <Text className="text-black font-bold text-2xl">
             Welcome back, <Text className="text-primary-600">{user?.name}</Text>
           </Text>
+
+          {/* if there is an error show it  */}
+          {errorMsg === "" ? null : (
+            <Text className="text-red-500 text-sm mt-2">{errorMsg}</Text>
+          )}
         </View>
 
         {/* Admin Dashboard */}
