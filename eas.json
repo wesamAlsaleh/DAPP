@@ -5,6 +5,9 @@
   },
   "build": {
     "development": {
+      "env": {
+        "EXPO_PUBLIC_URL": "https://dapp.bableto.site/api"
+      },
       "developmentClient": true,
       "distribution": "internal"
     },
@@ -22,10 +25,6 @@
     }
   },
   "submit": {
-    "production": {
-      "env": {
-        "EXPO_PUBLIC_URL": "https://dapp.bableto.site/api"
-      }
-    }
+    "production": {}
   }
 }
