@@ -13,7 +13,7 @@
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_URL": "http://dapp.bableto.site/api"
+        "EXPO_PUBLIC_URL": "https://dapp.bableto.site/api"
       },
       "autoIncrement": true,
       "android": {
@@ -22,6 +22,10 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_URL": "https://dapp.bableto.site/api"
+      }
+    }
   }
 }
