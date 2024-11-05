@@ -37,8 +37,14 @@ const SignIn = () => {
     // console.log(formValues);
 
     try {
+      // TODO: Remove this console.log
+      console.log("API URL:", process.env.EXPO_PUBLIC_URL);
+
       // Login the user using the email and password
       await login(formValues.email, formValues.password); // this function will put the user token in the secure store
+
+      // TODO: Remove this console.log
+      console.log("Login successful!");
 
       // Load the user data
       const user = await loadUser();
@@ -50,8 +56,7 @@ const SignIn = () => {
       router.push("/(root)/(tabs)/home");
     } catch (error) {
       setError({
-        message:
-          "* An unexpected error occurred. Please check your email and password.",
+        message: `* Error during login. ${error}`,
       });
     }
   }, [formValues.email, formValues.password]);
