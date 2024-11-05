@@ -12,7 +12,18 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_URL": "http://dapp.bableto.site/api"
+      }
+    }
+  },
+  "test": {
+    "env": {
+      "EXPO_PUBLIC_URL": "http://dapp.bableto.site/api"
     }
   },
   "submit": {
