@@ -12,10 +12,9 @@ interface MapProps {
     latitude: number;
     longitude: number;
   } | null;
-  drivers: User[]; // Accept drivers as a prop
 }
 
-export default function UserMap({ userLocation, drivers }: MapProps) {
+export default function UserMap({ userLocation }: MapProps) {
   // Set the initial region of the map to the user's location if available or to Bahrain
   const initialRegion = userLocation
     ? {
@@ -31,8 +30,6 @@ export default function UserMap({ userLocation, drivers }: MapProps) {
         longitudeDelta: 0.0421,
       };
 
-  // console.log(drivers);
-
   return (
     <View className="mt-4 rounded-xl overflow-hidden shadow-lg">
       <MapView
@@ -40,25 +37,10 @@ export default function UserMap({ userLocation, drivers }: MapProps) {
         showsCompass={true} // Display a compass on the map
         className="w-full h-[300px]" // map style
         showsPointsOfInterest={false} // Disable points of interest (like restaurants, landmarks)
-        initialRegion={initialRegion}
+        initialRegion={initialRegion} // Set the initial region of the map
         showsUserLocation={true} // Enable the display of the user's current location on the map
         showsMyLocationButton={true} // Show a button to recenter the map to the user's location
-      >
-        {drivers.map((driver) => {
-          // Convert latitude and longitude to numbers
-          const latitude = Number(driver.latitude);
-          const longitude = Number(driver.longitude);
-
-          // Validate that they are numbers
-          const isValidCoordinates = !isNaN(latitude) && !isNaN(longitude);
-
-          // Only render the marker if the coordinates are valid
-          if (!isValidCoordinates) {
-            console.warn(`Invalid coordinates for driver ${driver.id}`);
-            return null;
-          }
-        })}
-      </MapView>
+      />
     </View>
   );
 }

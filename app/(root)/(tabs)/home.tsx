@@ -289,7 +289,7 @@ export default function Home() {
               Here's where you are right now:
             </Text>
 
-            <UserMap drivers={drivers} userLocation={userLocation} />
+            <UserMap userLocation={userLocation} />
           </View>
         ) : null}
 
