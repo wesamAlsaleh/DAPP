@@ -93,6 +93,8 @@ export default function Home() {
     longitude: number;
   } | null>(null);
 
+  setUserLocation({ latitude: 6.5244, longitude: 3.3792 });
+
   // Tracking state
   const [isTracking, setIsTracking] = useState(false);
 
@@ -267,11 +269,9 @@ export default function Home() {
               {loading ? (
                 // Display loading spinner if still loading
                 <LoadingSpinner indicatorMessage="Loading drivers..." />
-              ) : (
-                // Display the Map when loading is done
-                // TODO: Only add the available/busy drivers to the map
+              ) : userLocation ? (
                 <Map userLocation={userLocation} drivers={drivers} />
-              )}
+              ) : null}
             </View>
           </>
         ) : null}
@@ -289,7 +289,7 @@ export default function Home() {
               Here's where you are right now:
             </Text>
 
-            <UserMap userLocation={userLocation} />
+            {userLocation ? <UserMap userLocation={userLocation} /> : null}
           </View>
         ) : null}
 
