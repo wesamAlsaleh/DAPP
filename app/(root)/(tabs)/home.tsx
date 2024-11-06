@@ -32,6 +32,48 @@ import { User } from "@/types/user";
 // Define the name of the background location task for TaskManager
 const LOCATION_TASK_NAME = "background-location-task";
 
+/**
+ * Define the task if the task is not already defined for TaskManager
+ *  to run in the background.
+ */
+if (!TaskManager.isTaskDefined(LOCATION_TASK_NAME)) {
+  // Define the background location task
+  TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+    // Handle any errors that occur during the background task
+    if (error) {
+      console.error("* Background location task error:", error);
+      return;
+    }
+
+    // Check if data was received in the background task
+    if (!data) {
+      console.error("* No data received in background task");
+      return;
+    }
+
+    try {
+      // Get the location data from the task data
+      const { locations } = data as { locations: LocationObject[] };
+
+      // Check if location data was received
+      if (locations && locations.length > 0) {
+        // Get the first location object from the array
+        const location = locations[0];
+
+        // Get the latitude and longitude from the location object
+        const { latitude, longitude } = location.coords;
+
+        // Send the updated location to the database
+        await updateDriverLocation({ latitude, longitude });
+
+        console.log("Background location updated:", { latitude, longitude });
+      }
+    } catch (error) {
+      console.error("* Error processing background location:", error);
+    }
+  });
+}
+
 export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
@@ -51,139 +93,151 @@ export default function home() {
     longitude: number;
   } | null>(null);
 
-  // Define the background location task for TaskManager to execute
-  TaskManager.defineTask(
-    LOCATION_TASK_NAME,
-    async ({
-      data,
-      error,
-    }: TaskManager.TaskManagerTaskBody<{ locations: LocationObject[] }>) => {
-      // Log the error if there is one
-      if (error) {
-        console.error("Background location task error:", error);
-        return;
+  // Tracking state
+  const [isTracking, setIsTracking] = useState(false);
+
+  // Function to start location tracking
+  const startLocationTracking = async () => {
+    try {
+      // Request location permissions
+      const { status: foregroundStatus } =
+        await Location.requestForegroundPermissionsAsync();
+
+      // if the permission is not granted, show an error message
+      if (foregroundStatus !== "granted") {
+        setErrorMsg("Location permission denied");
+        return false;
       }
 
-      // Extract user locations from data
-      const { locations } = data;
+      // Request background permissions
+      const { status: backgroundStatus } =
+        await Location.requestBackgroundPermissionsAsync();
 
-      // Process the locations array
-      locations.forEach(async (location) => {
-        // Extract the user latitude and longitude from the location object
-        const { latitude, longitude } = location.coords;
+      // if the permission is not granted, show an error message
+      if (backgroundStatus !== "granted") {
+        setErrorMsg("Background location permission denied");
+        return false;
+      }
 
-        // Update the user location state with the retrieved latitude and longitude
-        setUserLocation({ latitude, longitude });
+      /**
+       * Check if tracking is already active for the location task.
+       * A promise which fulfills with boolean value indicating
+       *  whether the location task is started or not.
+       */
+      const hasStarted = await Location.hasStartedLocationUpdatesAsync(
+        LOCATION_TASK_NAME
+      ).catch(() => false);
 
-        // Send the updated location to the database
-        await updateDriverLocation({ latitude, longitude });
+      // Start location tracking if not already active
+      if (!hasStarted) {
+        // Configure background location tracking settings
+        await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+          accuracy: Location.Accuracy.Balanced, // Balance between accuracy and battery life
+          distanceInterval: 10, // Minimum distance in meters before updates (10 meters)
+          deferredUpdatesInterval: 5000, // Minimum time in ms between updates (5 seconds)
+          // Foreground service notification for Android
+          foregroundService: {
+            notificationTitle: "Location Tracking Active",
+            notificationBody: "Tracking your location for delivery updates",
+            notificationColor: "#001a72",
+          },
+          // Activity recognition configuration
+          activityType: Location.ActivityType.AutomotiveNavigation, // Activity type for location updates
+          showsBackgroundLocationIndicator: true, // Show location indicator in status bar
+          // Battery saving settings
+          pausesUpdatesAutomatically: true, // Pause updates when the app is in the background
+        });
 
-        // console.log("Received location:", location);
-      });
+        setIsTracking(true); // Set tracking state to true
+        console.log("Location tracking started");
+      }
+
+      // Start foreground location updates for immediate feedback (foreground means the app is open)
+      Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.Balanced, // Balance between accuracy and battery life
+          distanceInterval: 10, // Minimum distance in meters before updates (10 meters)
+          timeInterval: 5000, // Minimum time in ms between updates (5 seconds)
+        },
+        (location) => {
+          // Update the user location state with the new location
+          setUserLocation({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          });
+        }
+      );
+
+      return true;
+    } catch (error) {
+      console.error("* Error starting location tracking:", error);
+      setErrorMsg("Failed to start location tracking"); // Show error message if tracking fails
+      return false;
     }
-  );
+  };
 
-  // useEffect hook to fetch drivers from the database and start location tracking
+  // Function to stop location tracking
+  const stopLocationTracking = async () => {
+    try {
+      // Check if tracking is already active for the location task
+      const hasStarted = await Location.hasStartedLocationUpdatesAsync(
+        LOCATION_TASK_NAME
+      ).catch(() => false);
+
+      // Stop location tracking if already active
+      if (hasStarted) {
+        await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+        setIsTracking(false);
+        console.log("Location tracking stopped");
+      }
+    } catch (error) {
+      console.error("Error stopping location tracking:", error);
+    }
+  };
+
+  // Fetch drivers effect
   useEffect(() => {
-    /**
-     * Fetches drivers from the database and updates the drivers state.
-     *
-     * @async
-     * @function fetchDrivers
-     * @returns {Promise<void>} A promise that resolves when the drivers have been fetched and the state has been updated.
-     * @throws Will log an error message if there is an issue fetching the drivers.
-     */
+    let isMounted = true; // Set mounted state to true
+
     const fetchDrivers = async () => {
       try {
         // Fetch drivers from the database
         const driversFromDB = await getDrivers();
 
-        // Update the drivers state with the fetched drivers
-        setDrivers(driversFromDB);
-      } catch (error) {
-        console.error("* Error fetching drivers", error);
-      } finally {
-        setLoading(false); // Set loading to false after fetching drivers
-      }
-    };
-
-    /**
-     * Requests permission to access the device's location.
-     *
-     * @returns {Promise<boolean>} A promise that resolves to `true` if the permission was granted,
-     *                             or `false` if there was an error or the permission was denied.
-     *
-     * @throws {Error} If there is an error requesting location permission.
-     */
-    const requestLocationPermission = async () => {
-      try {
-        // Request permission to access location
-        let { status } = await Location.requestForegroundPermissionsAsync();
-
-        // Check if permission was granted or not
-        if (status !== "granted") {
-          setErrorMsg("Permission to access location was denied");
-          return;
+        // if the component is still mounted, set the drivers and loading state
+        if (isMounted) {
+          setDrivers(driversFromDB);
+          setLoading(false);
         }
-
-        return true;
       } catch (error) {
-        console.error("* Error requesting location permission", error);
-        return false;
-      }
-    };
-
-    /**
-     * Starts tracking the user's location in the background using the TaskManager.
-     *
-     * This function first checks for location permissions. If the permission is granted,
-     * it starts location tracking with high accuracy, updating the location every second
-     * and every meter moved.
-     *
-     * @returns {Promise<void>} A promise that resolves when the location tracking has started.
-     */
-    const startTracking = async () => {
-      /**
-       * Clear any previous error messages
-       * Each time you attempt to start tracking the user's location,
-       * any previous error message is cleared first.
-       */
-      setErrorMsg("");
-
-      // checks for location permissions
-      const hasPermission = await requestLocationPermission();
-
-      // if he have the permission get the driver location
-      if (hasPermission) {
-        // Request background location permissions
-        const { status: backgroundStatus } =
-          await Location.requestBackgroundPermissionsAsync();
-
-        // Check if background location permissions were granted
-        if (backgroundStatus === "granted") {
-          await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-            // Start location updates in the background with high accuracy
-            accuracy: Location.Accuracy.High, // Use high accuracy for location updates (GPS)
-            distanceInterval: 1, // Update location every meter
-            deferredUpdatesInterval: 1000, // Update location every second
-          });
-        } else {
-          setErrorMsg("Background location permission was denied");
-          return;
+        console.error("Error fetching drivers:", error);
+        if (isMounted) {
+          setLoading(false);
+          setErrorMsg("Failed to fetch drivers data");
         }
       }
     };
 
-    // If the user is logged in, fetch drivers
+    // if the user is an admin, fetch the drivers
     if (user?.role === "admin") {
-      fetchDrivers(); // Fetch Drivers
+      fetchDrivers();
     }
 
-    // Check if user is logged in and start tracking
-    if (user) {
-      startTracking(); // Start tracking
+    // if the user is a driver, start location tracking
+    if (user?.role === "driver") {
+      startLocationTracking();
     }
-  }, [user]); // Run this effect when the user changes (login/logout)
+
+    // return a cleanup function
+    return () => {
+      isMounted = false;
+
+      // if the user is a driver, stop location tracking
+      if (user?.role === "driver") {
+        stopLocationTracking();
+      }
+    };
+  }, [user]);
 
   return (
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
