@@ -256,25 +256,27 @@ export default function home() {
           )}
         </View>
         {/* Admin Dashboard */}
-        {user?.role === "admin" ? (
+        {user?.role === "admin" && (
           <>
-            {/* Admin widget */}
-            <DriversCountWidget driversCount={drivers.length} />
-
-            {/* Map Section */}
             <View>
               {loading ? (
                 // Display loading spinner if still loading
                 <LoadingSpinner indicatorMessage="Loading drivers..." />
               ) : (
-                <Map drivers={drivers} />
+                <>
+                  {/* Admin widget */}
+                  <DriversCountWidget driversCount={drivers.length} />
+
+                  {/* Map Section */}
+                  <Map drivers={drivers} />
+                </>
               )}
             </View>
           </>
-        ) : null}
+        )}
 
         {/* Driver Dashboard */}
-        {user?.role === "driver" ? (
+        {user?.role === "driver" && (
           <View>
             {/* Status Bar widget */}
             <StatusWidget />
@@ -289,7 +291,7 @@ export default function home() {
             {/* Map Section */}
             {userLocation ? <UserMap userLocation={userLocation} /> : null}
           </View>
-        ) : null}
+        )}
         {/* footer section */}
         <View></View>
       </ScrollView>
