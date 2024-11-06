@@ -197,24 +197,15 @@ export default function home() {
 
   // Fetch drivers effect
   useEffect(() => {
-    let isMounted = true; // Set mounted state to true
-
     const fetchDrivers = async () => {
       try {
-        // Fetch drivers from the database
         const driversFromDB = await getDrivers();
 
-        // if the component is still mounted, set the drivers and loading state
-        if (isMounted) {
-          setDrivers(driversFromDB);
-          setLoading(false);
-        }
+        setDrivers(driversFromDB);
       } catch (error) {
-        console.error("Error fetching drivers:", error);
-        if (isMounted) {
-          setLoading(false);
-          setErrorMsg("Failed to fetch drivers data");
-        }
+        console.error("Error fetching drivers", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -294,7 +285,7 @@ export default function home() {
             ) : (
               <View className="mt-4 p-4 bg-red-100 rounded-lg">
                 <Text className="text-red-500 font-bold text-sm">
-                  * Location permission denied
+                  * Location not available
                 </Text>
               </View>
             )}
