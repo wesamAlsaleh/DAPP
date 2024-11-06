@@ -263,14 +263,14 @@ export default function Home() {
             <DriversCountWidget driversCount={drivers.length} />
 
             {/* Map Section */}
-            {/* <View>
+            <View>
               {loading ? (
                 // Display loading spinner if still loading
                 <LoadingSpinner indicatorMessage="Loading drivers..." />
               ) : userLocation ? (
-                <Map userLocation={userLocation} drivers={drivers} />
+                <Map drivers={drivers} />
               ) : null}
-            </View> */}
+            </View>
           </>
         ) : null}
 
