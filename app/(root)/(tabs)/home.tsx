@@ -284,7 +284,6 @@ export default function home() {
           <View>
             {/* Status Bar widget */}
             <StatusWidget />
-
             <Text className="mt-4 font-bold text-2xl">
               You're on the move! 🚗
             </Text>
