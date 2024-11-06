@@ -32,6 +32,39 @@ import { User } from "@/types/user";
 // Define the name of the background location task for TaskManager
 const LOCATION_TASK_NAME = "background-location-task";
 
+// Define the background location task for TaskManager to execute
+TaskManager.defineTask(
+  LOCATION_TASK_NAME,
+  async ({
+    data,
+    error,
+  }: TaskManager.TaskManagerTaskBody<{ locations: LocationObject[] }>) => {
+    // Log the error if there is one
+    if (error) {
+      console.error("Background location task error:", error);
+      return;
+    }
+
+    // Extract user locations from data
+    const { locations } = data;
+
+    // Check if locations array is not empty
+    if (locations && locations.length > 0) {
+      // Process the locations array
+      locations.forEach(async (location) => {
+        // Extract the user latitude and longitude from the location object
+        const { latitude, longitude } = location.coords;
+
+        // Update the user location state with the retrieved latitude and longitude
+        // setUserLocation({ latitude, longitude });
+
+        // Send the updated location to the database
+        await updateDriverLocation({ latitude, longitude });
+      });
+    }
+  }
+);
+
 export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
@@ -40,71 +73,19 @@ export default function home() {
   const [drivers, setDrivers] = useState<User[]>([]);
 
   // Error state
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Loading state
   const [loading, setLoading] = useState(true);
 
-  // User location state
+  // User location state hook to store the user's current location
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
   } | null>(null);
 
-  // Define the background location task for TaskManager to execute
-  TaskManager.defineTask(
-    LOCATION_TASK_NAME,
-    async ({
-      data,
-      error,
-    }: TaskManager.TaskManagerTaskBody<{ locations: LocationObject[] }>) => {
-      // Log the error if there is one
-      if (error) {
-        console.error("Background location task error:", error);
-        return;
-      }
-
-      // Extract user locations from data
-      const { locations } = data;
-
-      // Process the locations array
-      locations.forEach(async (location) => {
-        // Extract the user latitude and longitude from the location object
-        const { latitude, longitude } = location.coords;
-
-        // Update the user location state with the retrieved latitude and longitude
-        setUserLocation({ latitude, longitude });
-
-        // Send the updated location to the database
-        await updateDriverLocation({ latitude, longitude });
-      });
-    }
-  );
-
   // useEffect hook to fetch drivers from the database and start location tracking
   useEffect(() => {
-    /**
-     * Fetches drivers from the database and updates the drivers state.
-     *
-     * @async
-     * @function fetchDrivers
-     * @returns {Promise<void>} A promise that resolves when the drivers have been fetched and the state has been updated.
-     * @throws Will log an error message if there is an issue fetching the drivers.
-     */
-    const fetchDrivers = async () => {
-      try {
-        // Fetch drivers from the database
-        const driversFromDB = await getDrivers();
-
-        // Update the drivers state with the fetched drivers
-        setDrivers(driversFromDB);
-      } catch (error) {
-        console.error("* Error fetching drivers", error);
-      } finally {
-        setLoading(false); // Set loading to false after fetching drivers
-      }
-    };
-
     /**
      * Requests permission to access the device's location.
      *
@@ -141,13 +122,6 @@ export default function home() {
      * @returns {Promise<void>} A promise that resolves when the location tracking has started.
      */
     const startTracking = async () => {
-      /**
-       * Clear any previous error messages
-       * Each time you attempt to start tracking the user's location,
-       * any previous error message is cleared first.
-       */
-      setErrorMsg("");
-
       // checks for location permissions
       const hasPermission = await requestLocationPermission();
 
@@ -156,6 +130,13 @@ export default function home() {
         // Request background location permissions
         const { status: backgroundStatus } =
           await Location.requestBackgroundPermissionsAsync();
+
+        /**
+         * Clear any previous error messages
+         * Each time you attempt to start tracking the user's location,
+         * any previous error message is cleared first.
+         */
+        setErrorMsg(null);
 
         // Check if background location permissions were granted
         if (backgroundStatus === "granted") {
@@ -172,6 +153,29 @@ export default function home() {
       }
     };
 
+    /**
+     * Fetches drivers from the database and updates the drivers state.
+     *
+     * @async
+     * @function fetchDrivers
+     * @returns {Promise<void>} A promise that resolves when the drivers have been fetched and the state has been updated.
+     * @throws Will log an error message if there is an issue fetching the drivers.
+     */
+    const fetchDrivers = async () => {
+      try {
+        // Fetch drivers from the database
+        const driversFromDB = await getDrivers();
+
+        // Update the drivers state with the fetched drivers
+        setDrivers(driversFromDB);
+      } catch (error) {
+        console.error("* Error fetching drivers", error);
+        setErrorMsg("Unable to load drivers."); // Set error message if there is an error fetching drivers
+      } finally {
+        setLoading(false); // Set loading to false after fetching drivers
+      }
+    };
+
     // If the user is logged in, fetch drivers
     if (user?.role === "admin") {
       fetchDrivers(); // Fetch Drivers
@@ -181,7 +185,7 @@ export default function home() {
     if (user) {
       startTracking(); // Start tracking
     }
-  }, [user]); // Run this effect when the user changes (login/logout)
+  }, []);
 
   return (
     <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-general-500">
@@ -201,7 +205,7 @@ export default function home() {
         </View>
 
         {/* Admin Dashboard */}
-        {user?.role === "admin" ? (
+        {user?.role === "admin" && !loading && (
           <>
             {/* Admin widget */}
             <DriversCountWidget driversCount={drivers.length} />
@@ -218,7 +222,7 @@ export default function home() {
               )}
             </View>
           </>
-        ) : null}
+        )}
 
         {/* Driver Dashboard */}
         {user?.role === "driver" ? (
