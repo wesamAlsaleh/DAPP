@@ -6,7 +6,8 @@
   "build": {
     "development": {
       "env": {
-        "EXPO_PUBLIC_URL": "https://dapp.bableto.site/api"
+        "EXPO_PUBLIC_URL": "https://dapp.bableto.site/api",
+        "EXPO_PUBLIC_GOOGLE_KEY": "AIzaSyBv5Nibrh5dD7sLAN6WL2tdeu153Cmr7i0"
       },
       "developmentClient": true,
       "distribution": "internal"
@@ -16,7 +17,8 @@
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_URL": "https://dapp.bableto.site/api"
+        "EXPO_PUBLIC_URL": "https://dapp.bableto.site/api",
+        "EXPO_PUBLIC_GOOGLE_KEY": "AIzaSyBv5Nibrh5dD7sLAN6WL2tdeu153Cmr7i0"
       },
       "autoIncrement": true,
       "android": {
