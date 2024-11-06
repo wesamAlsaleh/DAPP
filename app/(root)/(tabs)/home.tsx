@@ -292,6 +292,7 @@ export default function home() {
             {userLocation ? <UserMap userLocation={userLocation} /> : null}
           </View>
         )}
+
         {/* footer section */}
         <View></View>
       </ScrollView>
