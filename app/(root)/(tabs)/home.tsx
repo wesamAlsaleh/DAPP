@@ -289,7 +289,15 @@ export default function home() {
             </Text>
 
             {/* Map Section */}
-            {userLocation ? <UserMap userLocation={userLocation} /> : null}
+            {userLocation ? (
+              <UserMap userLocation={userLocation} />
+            ) : (
+              <View className="mt-4 p-4 bg-red-100 rounded-lg">
+                <Text className="text-red-500 font-bold text-sm">
+                  * Location permission denied
+                </Text>
+              </View>
+            )}
           </View>
         )}
 
