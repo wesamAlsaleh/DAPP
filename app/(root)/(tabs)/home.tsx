@@ -255,7 +255,6 @@ export default function home() {
             </Text>
           )}
         </View>
-
         {/* Admin Dashboard */}
         {user?.role === "admin" ? (
           <>
@@ -268,9 +267,7 @@ export default function home() {
                 // Display loading spinner if still loading
                 <LoadingSpinner indicatorMessage="Loading drivers..." />
               ) : (
-                // Display the Map when loading is done
-                // TODO: Only add the available/busy drivers to the map
-                <Map userLocation={userLocation} drivers={drivers} />
+                <Map drivers={drivers} />
               )}
             </View>
           </>
@@ -289,10 +286,10 @@ export default function home() {
               Here's where you are right now:
             </Text>
 
-            <UserMap drivers={drivers} userLocation={userLocation} />
+            {/* Map Section */}
+            {userLocation ? <UserMap userLocation={userLocation} /> : null}
           </View>
         ) : null}
-
         {/* footer section */}
         <View></View>
       </ScrollView>

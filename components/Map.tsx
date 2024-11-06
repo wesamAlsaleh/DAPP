@@ -9,10 +9,6 @@ import { icons } from "@/constants";
 import { User } from "@/types/user";
 
 interface MapProps {
-  userLocation: {
-    latitude: number;
-    longitude: number;
-  } | null;
   drivers: User[]; // Accept drivers as a prop
 }
 
