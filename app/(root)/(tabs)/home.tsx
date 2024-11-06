@@ -287,6 +287,7 @@ export default function Home() {
               Here's where you are right now:
             </Text>
 
+            {/* Map Section */}
             {/* {userLocation ? <UserMap userLocation={userLocation} /> : null} */}
           </View>
         ) : null}
