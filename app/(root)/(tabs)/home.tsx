@@ -228,7 +228,7 @@ export default function home() {
       startLocationTracking();
     }
 
-    // return a cleanup function
+    // return a cleanup function to stop location tracking when the component is unmounted or the user changes roles
     return () => {
       isMounted = false;
 
