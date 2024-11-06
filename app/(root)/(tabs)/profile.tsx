@@ -21,7 +21,7 @@ import { logout } from "@/services/auth-services";
 // import the icons from the constants
 import { icons } from "@/constants";
 
-export default function profile() {
+export default function Profile() {
   // get the user data from the AuthContext
   const { user, setUser } = useAuth();
 

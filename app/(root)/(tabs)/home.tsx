@@ -74,7 +74,7 @@ if (!TaskManager.isTaskDefined(LOCATION_TASK_NAME)) {
   });
 }
 
-export default function home() {
+export default function Home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
 

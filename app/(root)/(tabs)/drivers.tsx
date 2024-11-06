@@ -28,7 +28,7 @@ import { User } from "@/types/user";
 // import the getDrivers function from the driver-services script
 import { getDrivers } from "@/services/driver-services";
 
-export default function drivers() {
+export default function Drivers() {
   // loading state
   const [loading, setLoading] = useState(true);
 
