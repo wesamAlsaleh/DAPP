@@ -17,7 +17,6 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 
 // import location stuff
 import * as Location from "expo-location"; // For accessing location services
-
 import { LocationObject } from "expo-location";
 
 // import TaskManager from expo to manage background tasks
@@ -28,6 +27,8 @@ import { getDrivers, updateDriverLocation } from "@/services/driver-services";
 
 // import User interface
 import { User } from "@/types/user";
+
+import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 
 // Define the name of the background location task for TaskManager
 // const LOCATION_TASK_NAME = "background-location-task";
@@ -259,7 +260,19 @@ export default function home() {
                   <DriversCountWidget driversCount={drivers.length} />
 
                   {/* Map Section */}
-                  <Map drivers={drivers} />
+                  <View style={{ height: 600, marginVertical: 16 }}>
+                    <MapView
+                      provider={PROVIDER_GOOGLE}
+                      style={{ flex: 1 }}
+                      initialRegion={{
+                        latitude: 26.0667,
+                        longitude: 50.5577,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                      }}
+                    />
+                  </View>
+                  {/* <Map drivers={drivers} /> */}
                 </>
               )}
             </View>
