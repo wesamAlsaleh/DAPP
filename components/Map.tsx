@@ -27,9 +27,10 @@ export default function Map({ drivers }: MapProps) {
     <View className="mt-4 rounded-xl overflow-hidden shadow-lg">
       <MapView
         provider={PROVIDER_DEFAULT} // Use the default map provider (e.g., Google Maps if set up properly)
-        className="w-full h-[600px]" // map style
+        // className="w-full h-[600px]" // map style
         showsPointsOfInterest={false} // Disable points of interest (like restaurants, landmarks)
         initialRegion={initialRegion}
+        style={{ width: "100%", height: 600 }}
       >
         {drivers.map((driver) => {
           // Convert latitude and longitude to numbers
