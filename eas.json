@@ -10,10 +10,12 @@
         "EXPO_PUBLIC_GOOGLE_KEY": "AIzaSyBv5Nibrh5dD7sLAN6WL2tdeu153Cmr7i0"
       },
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "development"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "preview"
     },
     "production": {
       "env": {
@@ -23,7 +25,8 @@
       "autoIncrement": true,
       "android": {
         "buildType": "apk"
-      }
+      },
+      "channel": "production"
     }
   },
   "submit": {
