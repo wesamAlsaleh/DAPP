@@ -17,10 +17,6 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 
 // import location stuff
 import * as Location from "expo-location"; // For accessing location services
-import { LocationObject } from "expo-location";
-
-// import TaskManager from expo to manage background tasks
-import * as TaskManager from "expo-task-manager"; // For managing background tasks
 
 // import driver functions
 import { getDrivers, updateDriverLocation } from "@/services/driver-services";
@@ -145,6 +141,7 @@ export default function home() {
             </Text>
           )}
         </View>
+
         {/* Admin Dashboard */}
         {user?.role === "admin" && (
           <>
@@ -180,6 +177,7 @@ export default function home() {
           <View>
             {/* Status Bar widget */}
             <StatusWidget />
+
             <Text className="mt-4 font-bold text-2xl">
               You're on the move! 🚗
             </Text>
@@ -188,7 +186,6 @@ export default function home() {
             </Text>
 
             {/* Map Section */}
-
             {userLocation ? (
               <UserMap userLocation={userLocation} />
             ) : (
@@ -203,7 +200,7 @@ export default function home() {
 
         {/* footer section */}
         <>
-          {userLocation ? (
+          {user?.role === "driver" && userLocation ? (
             <View className="mt-4 p-4 bg-green-100 rounded-lg">
               <Text className="text-green-500 font-bold text-sm">
                 Your latitude: {userLocation.latitude}, your longitude:{" "}
@@ -220,7 +217,7 @@ export default function home() {
 
           <View className="mt-4 flex items-center">
             <Text className="text-center text-sm text-slate-400">
-              @ 2024/Nov DAPP branch <Text className="font-semibold">1.4</Text>
+              @ Nov/2024 DAPP production
             </Text>
           </View>
         </>

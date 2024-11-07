@@ -70,7 +70,7 @@ export default function StatusWidget() {
 
   return (
     // widget container
-    <View className="bg-white rounded-lg shadow-md mt-4 p-6">
+    <View className="bg-white rounded-lg shadow-md mt-3 p-5">
       <Text className="text-xl font-bold mb-4">Set your status:</Text>
       {loading ? (
         <LoadingSpinner indicatorMessage="Changing your status..." />
@@ -102,13 +102,6 @@ export default function StatusWidget() {
           ))}
         </View>
       )}
-
-      {/* <Text className="mt-4 text-base">
-        Current status:{" "}
-        <Text className="font-bold">
-          {status.charAt(0).toUpperCase() + status.slice(1)}
-        </Text>
-      </Text> */}
     </View>
   );
 }
