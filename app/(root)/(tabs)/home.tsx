@@ -200,17 +200,11 @@ export default function home() {
 
         {/* footer section */}
         <>
-          {user?.role === "driver" && userLocation ? (
+          {user?.role === "driver" && userLocation && (
             <View className="mt-4 p-4 bg-green-100 rounded-lg">
               <Text className="text-green-500 font-bold text-sm">
                 Your latitude: {userLocation.latitude}, your longitude:{" "}
                 {userLocation.longitude}
-              </Text>
-            </View>
-          ) : (
-            <View className="mt-4 p-4 bg-red-100 rounded-lg">
-              <Text className="text-red-500 font-bold text-sm">
-                * Due to location not available, we can't show your location
               </Text>
             </View>
           )}
