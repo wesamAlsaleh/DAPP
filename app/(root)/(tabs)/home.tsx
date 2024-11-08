@@ -44,24 +44,40 @@ export default function home() {
   } | null>(null);
 
   /**
-   * Function to get the user's location
-   * @returns Promise<LocationObject | null>
-   * @example {"_h": 0, "_i": 0, "_j": null, "_k": null}
+   * Requests both foreground and background location permissions from the user.
+   *
+   * @returns {Promise<boolean>} A promise that resolves to `true` if both permissions are granted,
+   *                             otherwise `false`.
+   *
+   * @throws Will log an error to the console if there is an issue requesting the permissions.
    */
   const requestLocationPermission = async () => {
     try {
-      // request the location
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      // request the foreground permission to access the location
+      let { status: foregroundStatus } =
+        await Location.requestForegroundPermissionsAsync();
+
+      // request the background permission to access the location
+      let { status: backgroundStatus } =
+        await Location.requestBackgroundPermissionsAsync();
 
       // if the location is not granted set a message
-      if (status !== "granted") {
+      if (foregroundStatus !== "granted") {
         setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      // if the background location is not granted set a message
+      if (backgroundStatus !== "granted") {
+        setErrorMsg(
+          "Permission to access location in the background was denied"
+        );
         return;
       }
 
       return true;
     } catch (error) {
-      console.error("Error requesting location permission", error);
+      console.error("* Error requesting location permission", error);
       return false;
     }
   };
