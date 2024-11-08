@@ -164,7 +164,7 @@ export default function drivers() {
               renderItem={renderDriverItem}
               keyExtractor={(item) => item.id.toString()}
               keyboardShouldPersistTaps="handled" // this will allow the keyboard to be dismissed when tapping outside the input field
-              contentContainerStyle={{ paddingBottom: 110 }} // increase the padding to make space for the bottom bar
+              contentContainerStyle={{ paddingBottom: 115 }} // increase the padding to make space for the bottom bar
               ListEmptyComponent={
                 <Text className="text-center text-xl font-bold text-gray-500 mt-4">
                   No drivers found
