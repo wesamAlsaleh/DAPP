@@ -163,6 +163,11 @@ export default function home() {
           distanceInterval: 200, // update every 200 meters
           deferredUpdatesInterval: 60000, // 1 minute
           showsBackgroundLocationIndicator: true, // show the location indicator in the status bar
+          foregroundService: {
+            notificationTitle: "Location Tracking",
+            notificationBody: "Tracking your location in the background",
+            notificationColor: "#FF0000", // Optional color customization
+          },
         });
       } catch (error) {
         console.error("* Error starting location updates:", error);
