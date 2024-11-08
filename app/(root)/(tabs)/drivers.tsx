@@ -28,7 +28,13 @@ import { User } from "@/types/user";
 // import the getDrivers function from the driver-services script
 import { getDrivers } from "@/services/driver-services";
 
+// import the AuthContext through useAuth hook
+import { useAuth } from "@/contexts/AuthContext";
+
 export default function drivers() {
+  // get the user data from the AuthContext
+  const { user } = useAuth();
+
   // loading state
   const [loading, setLoading] = useState(true);
 
@@ -81,7 +87,12 @@ export default function drivers() {
     return (
       <TouchableOpacity className="bg-white rounded-xl shadow-sm p-5 mb-4 border border-gray-200">
         {/* Name Section */}
-        <Text className="text-lg font-bold text-gray-800">{item.name}</Text>
+        <Text className="text-lg font-bold text-gray-800">
+          {item.name === user?.name && "🌟"} {item.name}{" "}
+          {item.name === user?.name && (
+            <Text className="text-sm font-medium text-primary-600">(You)</Text>
+          )}
+        </Text>
 
         {/* Email Container */}
         <View className="flex-row items-center mt-3">
