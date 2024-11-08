@@ -24,6 +24,18 @@ import { getDrivers, updateDriverLocation } from "@/services/driver-services";
 // import User interface
 import { User } from "@/types/user";
 
+// import TaskManager from expo
+import * as TaskManager from "expo-task-manager";
+
+// Background Task Identifier
+const LOCATION_TASK_NAME = "background-location-task";
+
+// Define a type for location coordinates
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
 export default function home() {
   // get the user data from the AuthContext
   const { user } = useAuth();
@@ -82,60 +94,98 @@ export default function home() {
     }
   };
 
-  // Fetch the driver's current location and send to backend
-  const fetchAndSendDriverLocation = async () => {
+  // // Fetch the driver's current location and send to backend
+  // const fetchAndSendDriverLocation = async () => {
+  //   try {
+  //     // get the granter location
+  //     const location = await Location.getCurrentPositionAsync({});
+
+  //     // Get the longitude & latitude from the granted location
+  //     const { latitude, longitude } = location.coords;
+
+  //     // Set the user location
+  //     setUserLocation({ latitude, longitude });
+
+  //     // Send the location to the database
+  //     await updateDriverLocation({ latitude, longitude });
+  //   } catch (error) {
+  //     console.error("* Error fetching driver location: ", error);
+  //   }
+  // };
+
+  // Function to fetch drivers from the database
+  const fetchDrivers = async () => {
     try {
-      // get the granter location
-      const location = await Location.getCurrentPositionAsync({});
+      const driversFromDB = await getDrivers();
 
-      // Get the longitude & latitude from the granted location
-      const { latitude, longitude } = location.coords;
+      setDrivers(driversFromDB);
+    } catch (error) {
+      console.error("Error fetching drivers", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      // console.log("User location:", { latitude, longitude });
+  // Register background task to fetch and update driver location
+  TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+    // If there is an error, log it to the console
+    if (error) {
+      console.error("* Error in location task:", error);
+      return;
+    }
 
-      // Set the user location
-      setUserLocation({ latitude, longitude });
+    // If there is data, update the driver location
+    if (data) {
+      // Parse the location data from the task
+      const locations = data as Location.LocationObject[];
 
-      // Send the location to the database
+      // Get the latitude and longitude from the first location
+      const { latitude, longitude } = locations[0].coords; // Get the first location data
+
+      // Update location in database
       await updateDriverLocation({ latitude, longitude });
-    } catch (error) {}
+    }
+  });
+
+  /**
+   * Starts tracking the driver's location, updating the backend periodically.
+   */
+  const startTracking = async (): Promise<void> => {
+    // check if the user has the permission
+    const hasPermission = await requestLocationPermission();
+
+    // if the user has the permission start tracking the location and send it to the task manager "LOCATION_TASK_NAME"
+    if (hasPermission) {
+      try {
+        // (task name, options) - Starts the background location task
+        await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+          accuracy: Location.Accuracy.High, // High accuracy
+          distanceInterval: 200, // update every 200 meters
+          deferredUpdatesInterval: 60000, // 1 minute
+          showsBackgroundLocationIndicator: true, // show the location indicator in the status bar
+        });
+      } catch (error) {
+        console.error("* Error starting location updates:", error);
+      }
+    }
+  };
+
+  /**
+   * Stops tracking the driver's location.
+   */
+  const stopTracking = async (): Promise<void> => {
+    try {
+      // Stops the background location
+      await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+    } catch (error) {
+      console.error("* Error stopping location updates:", error);
+    }
   };
 
   // Fetch drivers effect
   useEffect(() => {
-    const fetchDrivers = async () => {
-      try {
-        const driversFromDB = await getDrivers();
-
-        setDrivers(driversFromDB);
-      } catch (error) {
-        console.error("Error fetching drivers", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     // Fetch the drivers if the user is an admin
     if (user?.role === "admin") fetchDrivers();
-
-    const startTracking = async () => {
-      // check if the user has the permission
-      const hasPermission = await requestLocationPermission();
-
-      // if true fetch the user
-      if (hasPermission) {
-        // Fetch location initially
-        fetchAndSendDriverLocation();
-
-        // Fetch location every 1 minute
-        const locationInterval = setInterval(() => {
-          fetchAndSendDriverLocation();
-        }, 60000); // 60,000 milliseconds = 1 minute
-
-        // Cleanup interval on component unmount
-        return () => clearInterval(locationInterval);
-      }
-    };
 
     // Start tracking if the user is a driver
     if (user?.role === "driver") startTracking();
