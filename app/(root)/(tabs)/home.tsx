@@ -131,7 +131,7 @@ export default function home() {
         {/* header section */}
         <View className=" items-start justify-center">
           <Text className="text-black font-bold text-2xl">
-            Welcome back, <Text className="text-primary-600">{user?.name}</Text>
+            Welcome home, <Text className="text-primary-600">{user?.name}</Text>
           </Text>
 
           {/* if there is an error show it  */}
