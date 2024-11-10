@@ -2,7 +2,13 @@ import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
 declare interface ButtonProps extends TouchableOpacityProps {
   title: string;
-  bgVariant?: "primary" | "secondary" | "danger" | "outline" | "success";
+  bgVariant?:
+    | "primary"
+    | "primary2"
+    | "secondary"
+    | "danger"
+    | "outline"
+    | "success";
   textVariant?: "primary" | "default" | "secondary" | "danger" | "success";
   IconLeft?: React.ComponentType<any>;
   IconRight?: React.ComponentType<any>;
@@ -18,6 +24,8 @@ const getBgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
   switch (variant) {
     case "primary":
       return "bg-primary-500";
+    case "primary2":
+      return "bg-primary-600";
     case "secondary":
       return "bg-slate-500";
     case "danger":
@@ -27,7 +35,7 @@ const getBgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
     case "outline":
       return "bg-transparent border border-neutral-300 border-[0.5px]";
     default:
-      return "bg-primary-500";
+      return "bg-primary-600";
   }
 };
 
@@ -77,7 +85,7 @@ export default function CustomButton({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={` rounded-lg p-3 flex flex-row justify-center items-center shadow-md bg-primary-600 ${getBgVariantStyle(
+      className={`rounded-lg p-3 flex flex-row justify-center items-center shadow-md bg-primary-600 ${getBgVariantStyle(
         bgVariant
       )} ${className}`}
       {...props}

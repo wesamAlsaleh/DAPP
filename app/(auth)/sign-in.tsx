@@ -104,6 +104,7 @@ const SignIn = () => {
             title="Sign In"
             onPress={onSignInPress}
             className="mt-6"
+            bgVariant="primary2"
           />
 
           {/* sign up link */}
@@ -112,7 +113,7 @@ const SignIn = () => {
             className="text-center text-lg font-JakartaSemiBold text-general-200 mt-10"
           >
             <Text>New to DAPP?</Text>
-            <Text className="text-lg font-JakartaSemiBold text-primary-500">
+            <Text className="text-lg font-JakartaSemiBold text-primary-600">
               {" "}
               Sign Up
             </Text>
