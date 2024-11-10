@@ -59,7 +59,7 @@ export default function drivers() {
   const [refreshing, setRefreshing] = useState(false);
 
   // Active filter state
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilterType, setActiveFilterType] = useState("all");
 
   const fetchDrivers = async (filterType: string) => {
     // set loading to true
@@ -69,6 +69,7 @@ export default function drivers() {
       // get the drivers from the API based on the filter type
       let driversFromDB;
 
+      // switch the filter type based on the filter type passed to the fetchDrivers function
       switch (filterType) {
         case "available":
           driversFromDB = await getAvailableDrivers(); // get available drivers
@@ -86,8 +87,8 @@ export default function drivers() {
       // set the drivers state
       setDrivers(driversFromDB);
 
-      // set the active filter
-      setActiveFilter(filterType);
+      // set the active filter type to the filter type passed to the function
+      setActiveFilterType(filterType);
 
       // clear the error
       setError(null);
@@ -110,7 +111,7 @@ export default function drivers() {
   // Refresh function to be called on pull-to-refresh
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchDrivers(activeFilter);
+    await fetchDrivers(activeFilterType);
     setRefreshing(false);
   };
 
@@ -122,7 +123,7 @@ export default function drivers() {
       driver.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // render driver item to display the driver details on the flat list
+  // render driver item to display the driver details on the flat list "driver card"
   const renderDriverItem = ({ item }: any) => {
     return (
       <TouchableOpacity className="bg-white rounded-xl shadow-sm p-5 mb-4 border border-gray-200">
@@ -188,26 +189,28 @@ export default function drivers() {
 
   // Filter button component
   const FilterButton = ({
-    title,
-    filter,
+    buttonTitle,
+    buttonFilterType,
   }: {
-    title: string;
-    filter: string;
+    buttonTitle: string;
+    buttonFilterType: string;
   }) => (
     <TouchableOpacity
-      onPress={() => fetchDrivers(filter)}
-      className={`px-4 py-2 rounded-full mr-2 ${
-        activeFilter === filter
+      onPress={() => {
+        fetchDrivers(buttonFilterType);
+      }}
+      className={`px-4 py-2 rounded-lg mr-2 ${
+        activeFilterType === buttonFilterType
           ? "bg-primary-600 border-primary-600"
           : "bg-white border-gray-300"
       } border`}
     >
       <Text
-        className={`text-sm font-medium ${
-          activeFilter === filter ? "text-white" : "text-gray-700"
+        className={`text-sm font-medium text-center ${
+          activeFilterType === buttonFilterType ? "text-white" : "text-gray-700"
         }`}
       >
-        {title}
+        {buttonTitle}
       </Text>
     </TouchableOpacity>
   );
@@ -219,6 +222,13 @@ export default function drivers() {
         <View className="px-4 py-6">
           {/* header section */}
           <Text className="text-2xl font-bold mb-4">Drivers List</Text>
+
+          {/* error message */}
+          {error && (
+            <View className="mt-4 p-4 bg-red-100 rounded-lg">
+              <Text className="text-red-500 font-bold text-sm">* {error}</Text>
+            </View>
+          )}
 
           {/* search bar */}
           <CustomInputField
@@ -233,14 +243,16 @@ export default function drivers() {
 
           {/* filter section */}
           <View className="flex-row mb-4">
-            <FilterButton title="All" filter="all" />
-            <FilterButton title="Available" filter="available" />
-            <FilterButton title="Busy" filter="busy" />
-            <FilterButton title="Offline" filter="offline" />
+            <FilterButton buttonTitle="All" buttonFilterType="all" />
+            <FilterButton
+              buttonTitle="Available"
+              buttonFilterType="available"
+            />
+            <FilterButton buttonTitle="Busy" buttonFilterType="busy" />
+            <FilterButton buttonTitle="Offline" buttonFilterType="offline" />
           </View>
 
-          {/* main section */}
-          {/* if loading show spinner otherwise show the FlatList */}
+          {/* list section */}
           {isLoading ? (
             <LoadingSpinner indicatorMessage="Loading drivers..." />
           ) : (
