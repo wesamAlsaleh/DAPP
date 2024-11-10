@@ -33,6 +33,8 @@ import calendar from "@/assets/icons/calendar.png";
 import available from "@/assets/icons/available.png";
 import status from "@/assets/icons/status.png";
 import mapIcon from "@/assets/icons/mapIcon.png";
+import DAPPIcon1 from "@/assets/icons/appstore.png";
+import DAPPIcon2 from "@/assets/icons/playstore.png";
 
 // Import the images
 // import check from "@/assets/images/check.png";
@@ -86,4 +88,6 @@ export const icons = {
   available,
   status,
   mapIcon,
+  DAPPIcon1,
+  DAPPIcon2,
 };
