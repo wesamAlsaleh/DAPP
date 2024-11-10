@@ -19,7 +19,10 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import * as Location from "expo-location"; // For accessing location services
 
 // import driver functions
-import { getDrivers, updateDriverLocation } from "@/services/driver-services";
+import {
+  getOnlineDrivers,
+  updateDriverLocation,
+} from "@/services/driver-services";
 
 // import User interface
 import { User } from "@/types/user";
@@ -87,9 +90,9 @@ export default function home() {
 
   // Fetch drivers effect
   useEffect(() => {
-    const fetchDrivers = async () => {
+    const fetchMapDrivers = async () => {
       try {
-        const driversFromDB = await getDrivers();
+        const driversFromDB = await getOnlineDrivers();
 
         setDrivers(driversFromDB);
       } catch (error) {
@@ -100,7 +103,7 @@ export default function home() {
     };
 
     // Fetch the drivers if the user is an admin
-    if (user?.role === "admin") fetchDrivers();
+    if (user?.role === "admin") fetchMapDrivers();
 
     const startTracking = async () => {
       // check if the user has the permission

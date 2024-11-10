@@ -12,9 +12,27 @@ export const getDrivers = async () => {
   return response.data;
 };
 
-// TODO: Get the available/busy drivers only to use them on the map (send them through the home component)
+// get all the available and busy drivers
 export const getOnlineDrivers = async () => {
-  const response = await axios.get(`${API_BASE_URL}/online-drivers`);
+  const response = await axios.get(`${API_BASE_URL}/map-drivers`);
+  return response.data;
+};
+
+// get the available drivers count
+export const getAvailableDriversCount = async () => {
+  const response = await axios.get(`${API_BASE_URL}/available-drivers-count`);
+  return response.data;
+};
+
+// get the busy drivers count
+export const getBusyDriversCount = async () => {
+  const response = await axios.get(`${API_BASE_URL}/busy-drivers-count`);
+  return response.data;
+};
+
+// get the offline drivers count
+export const getOfflineDriversCount = async () => {
+  const response = await axios.get(`${API_BASE_URL}/offline-drivers-count`);
   return response.data;
 };
 
