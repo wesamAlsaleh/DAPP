@@ -12,7 +12,7 @@ export const getDrivers = async () => {
   return response.data;
 };
 
-// get all the available and busy drivers
+// get all the available and busy drivers for the map
 export const getOnlineDrivers = async () => {
   const response = await axios.get(`${API_BASE_URL}/map-drivers`);
   return response.data;
@@ -33,6 +33,30 @@ export const getBusyDriversCount = async () => {
 // get the offline drivers count
 export const getOfflineDriversCount = async () => {
   const response = await axios.get(`${API_BASE_URL}/offline-drivers-count`);
+  return response.data;
+};
+
+// get all the available drivers
+export const getAvailableDrivers = async () => {
+  const response = await axios.get(`${API_BASE_URL}/available-drivers-filter`);
+  return response.data;
+};
+
+// get all the busy drivers
+export const getBusyDrivers = async () => {
+  const response = await axios.get(`${API_BASE_URL}/busy-drivers-filter`);
+  return response.data;
+};
+
+// get all the offline drivers
+export const getOfflineDrivers = async () => {
+  const response = await axios.get(`${API_BASE_URL}/offline-drivers-filter`);
+  return response.data;
+};
+
+// get driver by id
+export const getDriverById = async (id: string) => {
+  const response = await axios.get(`${API_BASE_URL}/driver/${id}`);
   return response.data;
 };
 
