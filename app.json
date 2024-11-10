@@ -4,13 +4,14 @@
     "slug": "dapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/playstore.png",
+
+    "icon": "./assets/images/appIcon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/splash-screen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#78CBFBFF"
+      "backgroundColor": "#333333"
     },
     "ios": {
       "supportsTablet": true

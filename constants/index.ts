@@ -35,6 +35,7 @@ import status from "@/assets/icons/status.png";
 import mapIcon from "@/assets/icons/mapIcon.png";
 import DAPPIcon1 from "@/assets/icons/appstore.png";
 import DAPPIcon2 from "@/assets/icons/playstore.png";
+import SplashScreen from "@/assets/images/spash-screen1.png";
 
 // Import the images
 // import check from "@/assets/images/check.png";
@@ -88,6 +89,4 @@ export const icons = {
   available,
   status,
   mapIcon,
-  DAPPIcon1,
-  DAPPIcon2,
 };
