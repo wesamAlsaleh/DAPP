@@ -190,24 +190,24 @@ export default function drivers() {
   // Filter button component
   const FilterButton = ({
     buttonTitle,
-    buttonFilterType,
+    FilterType,
   }: {
     buttonTitle: string;
-    buttonFilterType: string;
+    FilterType: string;
   }) => (
     <TouchableOpacity
       onPress={() => {
-        fetchDrivers(buttonFilterType);
+        fetchDrivers(FilterType); // pass the filter type to the fetchDrivers function to get the drivers based on the filter type
       }}
       className={`px-4 py-2 rounded-lg mr-2 ${
-        activeFilterType === buttonFilterType
+        activeFilterType === FilterType
           ? "bg-primary-600 border-primary-600"
           : "bg-white border-gray-300"
       } border`}
     >
       <Text
         className={`text-sm font-medium text-center ${
-          activeFilterType === buttonFilterType ? "text-white" : "text-gray-700"
+          activeFilterType === FilterType ? "text-white" : "text-gray-700"
         }`}
       >
         {buttonTitle}
@@ -243,18 +243,15 @@ export default function drivers() {
 
           {/* filter section */}
           <View className="flex-row mb-4">
-            <FilterButton buttonTitle="All" buttonFilterType="all" />
-            <FilterButton
-              buttonTitle="Available"
-              buttonFilterType="available"
-            />
-            <FilterButton buttonTitle="Busy" buttonFilterType="busy" />
-            <FilterButton buttonTitle="Offline" buttonFilterType="offline" />
+            <FilterButton buttonTitle="All" FilterType="all" />
+            <FilterButton buttonTitle="Available" FilterType="available" />
+            <FilterButton buttonTitle="Busy" FilterType="busy" />
+            <FilterButton buttonTitle="Offline" FilterType="offline" />
           </View>
 
           {/* list section */}
           {isLoading ? (
-            <LoadingSpinner indicatorMessage="Loading drivers..." />
+            <LoadingSpinner indicatorMessage={`Loading drivers...`} />
           ) : (
             <FlatList
               data={filteredDrivers}
