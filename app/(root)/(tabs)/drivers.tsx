@@ -25,8 +25,16 @@ import { icons } from "@/constants";
 // import the User type from the user script
 import { User } from "@/types/user";
 
-// import the getDrivers function from the driver-services script
-import { getDrivers } from "@/services/driver-services";
+// Import the driver services (API calls)
+import {
+  getAvailableDrivers,
+  getAvailableDriversCount,
+  getBusyDrivers,
+  getBusyDriversCount,
+  getDrivers,
+  getOfflineDrivers,
+  getOnlineDrivers,
+} from "@/services/driver-services";
 
 // import the AuthContext through useAuth hook
 import { useAuth } from "@/contexts/AuthContext";
@@ -36,41 +44,73 @@ export default function drivers() {
   const { user } = useAuth();
 
   // loading state
-  const [loading, setLoading] = useState(true);
-
-  // query state to store the search query value
-  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   // drivers state
   const [drivers, setDrivers] = useState<User[]>([]);
 
+  // error state
+  const [error, setError] = useState<string | null>(null);
+
+  // query state to store the search query value
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Refresh state
   const [refreshing, setRefreshing] = useState(false);
 
-  // fetch drivers function to get the drivers from the database
-  const fetchDrivers = async () => {
-    try {
-      // get the drivers from the database
-      const driversFromDB = await getDrivers();
+  // Active filter state
+  const [activeFilter, setActiveFilter] = useState("all");
 
-      // set the drivers state with the fetched drivers
-      setDrivers(await driversFromDB);
+  const fetchDrivers = async (filterType: string) => {
+    // set loading to true
+    setIsLoading(true);
+
+    try {
+      // get the drivers from the API based on the filter type
+      let driversFromDB;
+
+      switch (filterType) {
+        case "available":
+          driversFromDB = await getAvailableDrivers(); // get available drivers
+          break;
+        case "busy":
+          driversFromDB = await getBusyDrivers(); // get busy drivers
+          break;
+        case "offline":
+          driversFromDB = await getOfflineDrivers(); // get offline drivers
+          break;
+        default:
+          driversFromDB = await getDrivers(); // get all drivers
+      }
+
+      // set the drivers state
+      setDrivers(driversFromDB);
+
+      // set the active filter
+      setActiveFilter(filterType);
+
+      // clear the error
+      setError(null);
     } catch (error) {
-      console.error("Error fetching drivers", error);
+      // set the error message
+      setError(`Error fetching ${filterType} drivers`);
+
+      // log the error
+      console.error(`* Error fetching ${filterType} drivers`, error);
     } finally {
-      setLoading(false); // This runs regardless of success or error
+      setIsLoading(false);
     }
   };
 
-  // Fetch the drivers when the component mounted
+  // Fetch all the drivers from the server as the default
   useEffect(() => {
-    fetchDrivers();
+    fetchDrivers("all");
   }, []);
 
   // Refresh function to be called on pull-to-refresh
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchDrivers(); // re-fetch drivers
+    await fetchDrivers(activeFilter);
     setRefreshing(false);
   };
 
@@ -146,6 +186,32 @@ export default function drivers() {
     );
   };
 
+  // Filter button component
+  const FilterButton = ({
+    title,
+    filter,
+  }: {
+    title: string;
+    filter: string;
+  }) => (
+    <TouchableOpacity
+      onPress={() => fetchDrivers(filter)}
+      className={`px-4 py-2 rounded-full mr-2 ${
+        activeFilter === filter
+          ? "bg-primary-600 border-primary-600"
+          : "bg-white border-gray-300"
+      } border`}
+    >
+      <Text
+        className={`text-sm font-medium ${
+          activeFilter === filter ? "text-white" : "text-gray-700"
+        }`}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+
   return (
     <ProtectedRoute>
       <SafeAreaView style={GlobalStyles.droidSafeArea} className="bg-white">
@@ -165,9 +231,17 @@ export default function drivers() {
             containerStyle="bg-primary-100"
           />
 
+          {/* filter section */}
+          <View className="flex-row mb-4">
+            <FilterButton title="All" filter="all" />
+            <FilterButton title="Available" filter="available" />
+            <FilterButton title="Busy" filter="busy" />
+            <FilterButton title="Offline" filter="offline" />
+          </View>
+
           {/* main section */}
           {/* if loading show spinner otherwise show the FlatList */}
-          {loading ? (
+          {isLoading ? (
             <LoadingSpinner indicatorMessage="Loading drivers..." />
           ) : (
             <FlatList
@@ -181,7 +255,7 @@ export default function drivers() {
                   No drivers found
                 </Text>
               }
-              ListFooterComponent={<View style={{ height: 120 }} />} // add an explicit spacer to push the last item above the bottom bar (solution for the bottom bar covering the last item)
+              ListFooterComponent={<View style={{ height: 200 }} />} // add an explicit spacer to push the last item above the bottom bar (solution for the bottom bar covering the last item)
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
               }

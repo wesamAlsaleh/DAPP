@@ -13,6 +13,7 @@ import Map from "@/components/Map";
 import UserMap from "@/components/UserMap";
 import StatusWidget from "@/components/widgets/status-widget";
 import DriversCountWidget from "@/components/widgets/drivers-count-widget";
+import AllDriversCountWidget from "@/components/widgets/filtering-widget";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 // import location stuff
@@ -167,6 +168,9 @@ export default function home() {
 
                       {/* Map Section */}
                       <Map drivers={drivers} />
+
+                      {/* Drivers widget */}
+                      {/* <AllDriversCountWidget /> */}
                     </>
                   )}
                 </>
