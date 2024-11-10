@@ -12,9 +12,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import Map from "@/components/Map";
 import UserMap from "@/components/UserMap";
 import StatusWidget from "@/components/widgets/status-widget";
-import DriversCountWidget from "@/components/widgets/drivers-count-widget";
-import AllDriversCountWidget from "@/components/widgets/filtering-widget";
+import AllDriversCountWidget from "@/components/widgets/all-drivers-count-widget";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import AdminWidget from "@/components/widgets/admin-widget";
 
 // import location stuff
 import * as Location from "expo-location"; // For accessing location services
@@ -164,13 +164,13 @@ export default function home() {
                   ) : (
                     <>
                       {/* Admin widget */}
-                      <DriversCountWidget driversCount={drivers.length} />
+                      <AdminWidget />
 
                       {/* Map Section */}
                       <Map drivers={drivers} />
 
                       {/* Drivers widget */}
-                      {/* <AllDriversCountWidget /> */}
+                      <AllDriversCountWidget />
                     </>
                   )}
                 </>
