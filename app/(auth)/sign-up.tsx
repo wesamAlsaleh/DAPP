@@ -108,6 +108,7 @@ const SignUp = () => {
             title="Sign Up"
             onPress={onSignUpPress}
             className="mt-6"
+            bgVariant="primary2"
           />
 
           {/* Have an account? Sign in */}
@@ -116,7 +117,7 @@ const SignUp = () => {
             className="text-center text-lg font-JakartaSemiBold text-general-200 mt-10"
           >
             <Text>Have an account?</Text>
-            <Text className="text-lg font-JakartaSemiBold text-primary-500">
+            <Text className="text-lg font-JakartaSemiBold text-primary-600">
               {" "}
               Sign in
             </Text>
